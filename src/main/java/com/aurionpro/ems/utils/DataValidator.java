@@ -102,28 +102,36 @@ public class DataValidator {
 
 	    while (rs.next()) {
 	        Student student = new Student();
+
 	        User user = student.getUser();
 
-	      
-	       user.setFirstName(rs.getString("first_name"));
-	       user.setLastName(rs.getString("last_name"));
-	       user.setMobileNumber(rs.getLong("mobile_number"));
-	       user.setEmail(rs.getString("email"));
-	       user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase())); 
-	       user.setCity(rs.getString("city"));
-	       user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-	       user.setCreatedAt(rs.getTimestamp("created_at"));
-	       user.setFirstLogin(rs.getBoolean("is_first_login"));     
+	        user.setFirstName(rs.getString("first_name"));
+	        user.setLastName(rs.getString("last_name"));
+	        user.setMobileNumber(rs.getLong("mobile_number"));
+	        user.setEmail(rs.getString("email"));
+	        user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+	        user.setCity(rs.getString("city"));
+	        user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+
+	        
+	        try {
+	            user.setCreatedAt(rs.getTimestamp("created_at"));
+	            user.setFirstLogin(rs.getBoolean("is_first_login")); 
+	        } catch (SQLException e) {
+	           
+	        }
+
 	        student.setStudentId(rs.getInt("student_id"));
 	        student.setRollNumber(rs.getInt("roll_number"));
 	        student.setAveragePercentage(rs.getBigDecimal("average_percentage"));
 	        student.setYearOfStudy(rs.getInt("year_of_study"));
-	        
+
 	        students.add(student);
 	    }
 
 	    return students;
 	}
+
 
 
 	

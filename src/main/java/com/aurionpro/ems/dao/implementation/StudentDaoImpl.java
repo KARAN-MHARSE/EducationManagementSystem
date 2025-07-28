@@ -1,10 +1,12 @@
 package com.aurionpro.ems.dao.implementation;
 
+import java.net.SocketException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.aurionpro.ems.database.Database;
 import com.aurionpro.ems.model.*;
+import com.aurionpro.ems.utils.DataValidator;
 import com.aurionpro.ems.Enum.Gender;
 import com.aurionpro.ems.Enum.Role;
 import com.aurionpro.ems.dao.IStudentDao;
@@ -42,40 +44,7 @@ public class StudentDaoImpl implements IStudentDao {
 		}
 	}
 
-	@Override
-	public List<Student> getAllStudents() {
-		List<Student> students = new ArrayList<>();
-		String query = "select u.*,s.* from ems.user u join ems.student s on u.user_id = s.user_id";
-
-		try (PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
-
-			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("first_name"));
-				user.setLastName(rs.getString("last_name"));
-				user.setMobileNumber(rs.getLong("mobile_number"));
-				user.setEmail(rs.getString("email"));
-				user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
-				user.setCity(rs.getString("city"));
-				user.setRole(Role.valueOf(rs.getString("role")));
-				user.setCreatedAt(rs.getDate("created_at"));
-				user.setFirstLogin(rs.getBoolean("is_first_login"));
-
-				Student student = new Student();
-				student.setStudentId(rs.getInt("student_id"));
-				student.setRollNumber(rs.getInt("roll_number"));
-				student.setAveragePercentage(rs.getBigDecimal("average_percentage"));
-				student.setYearOfStudy(rs.getInt("year_of_study"));
-				student.setUser(user);
-
-				students.add(student);
-			}
-		} catch (SQLException e) {
-			System.out.println("Error fetching students: " + e.getMessage());
-		}
-
-		return students;
-	}
+	
 
 	public boolean isStudentExists(String email, int rollNumber) {
 
@@ -96,5 +65,26 @@ public class StudentDaoImpl implements IStudentDao {
 			System.out.println("Error checking existing student: " + exception.getMessage());
 		}
 		return false;
+	}
+
+
+
+	@Override
+	public List<Student> getAllStudents() {
+		
+		 String query = "SELECT u.*, s.* FROM ems.user u JOIN ems.student s ON u.user_id = s.user_id";
+		 List<Student> students = new ArrayList();
+		 
+		 try(PreparedStatement preparedStatement = conn.prepareStatement(query);
+				 ResultSet resultSet = preparedStatement.executeQuery()){
+			 
+			 
+			 students= DataValidator.convertResultSetToStudentList(resultSet);
+			 
+		 }catch(SQLException exception) {
+			 System.out.println(exception.getMessage());
+		 }
+		return students;
+		
 	}
 }

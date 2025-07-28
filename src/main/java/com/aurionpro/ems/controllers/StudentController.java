@@ -102,7 +102,7 @@ public class StudentController {
 		user.setEmail(email);
 		user.setCity(city);
 		user.setGender(gender);
-		user.setRole(Role.Student);
+		user.setRole(Role.STUDENT);
 		user.setCreatedAt(new Timestamp(new Date().getTime()));
 		user.setFirstLogin(true);  
 		user.setActive(true);      

@@ -11,6 +11,7 @@ public class Student {
     private int yearOfStudy;
 
     public Student() {
+    	this.user = new User();
     }
 
     public Student(User user, int rollNumber, BigDecimal averagePercentage, int yearOfStudy) {
