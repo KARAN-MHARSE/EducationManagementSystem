@@ -1,12 +1,14 @@
-package com.aurionpro.ems.database;
+	package com.aurionpro.ems.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import com.aurionpro.ems.utils.DatabaseUrl;
+
 public class Database {
 //	Singletone class to established the jdbc connection
 	private static Connection connection;
-	private static String databaseURL = "jdbc:mysql://2RqhxCH2xFBML5G.root:gxETaI26hEoylgjr@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/ems";
+	private static String databaseURL = DatabaseUrl.getDatabaseUrl();
 	
 	private Database() {		
 	}
@@ -20,6 +22,7 @@ public class Database {
 				System.out.println(e.getMessage());
 			}
 		}
+		System.out.println("Connected");
 		return connection;
 		
 	}

@@ -1,6 +1,12 @@
 package com.aurionpro.ems.controllers;
 
+import java.util.Scanner;
+
 public class StudentController {
-//	Student controller
+
+	public static void showMenu(Scanner scanner) {
+		System.out.println("Student controller");
+		
+	}
 
 }
