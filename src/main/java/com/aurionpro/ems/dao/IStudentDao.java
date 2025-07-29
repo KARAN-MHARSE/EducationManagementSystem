@@ -7,4 +7,7 @@ public interface IStudentDao {
     boolean addStudent(Student student);
     List<Student> getAllStudents();
 	boolean isStudentExists(String email, int rollNumber);
+	boolean assignCourse(int studentId, int courseId);
+	public void viewCoursesByStudentId(int studentId);
+
 }

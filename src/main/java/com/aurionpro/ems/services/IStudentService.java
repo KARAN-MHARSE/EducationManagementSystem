@@ -4,14 +4,13 @@ import java.util.List;
 
 import com.aurionpro.ems.model.Student;
 
-
-
 public interface IStudentService {
-    boolean addStudent(Student student);
-    List<Student> getAllStudents();
+	boolean addStudent(Student student);
+
+	List<Student> getAllStudents();
+
+	public boolean assignCourse(int studentId, int courseId);
+
+	public void viewCourseById(int studentId);
 
 }
-
-
-
-

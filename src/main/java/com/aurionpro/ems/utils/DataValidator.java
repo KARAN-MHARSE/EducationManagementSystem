@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import com.aurionpro.ems.Enum.Gender;
 import com.aurionpro.ems.Enum.Role;
 import com.aurionpro.ems.model.Student;
-import com.aurionpro.ems.model.User;
+//import com.aurionpro.ems.model.User;
 
 
 
@@ -103,20 +103,20 @@ public class DataValidator {
 	    while (rs.next()) {
 	        Student student = new Student();
 
-	        User user = student.getUser();
+	        //User user = student.getUser();
 
-	        user.setFirstName(rs.getString("first_name"));
-	        user.setLastName(rs.getString("last_name"));
-	        user.setMobileNumber(rs.getLong("mobile_number"));
-	        user.setEmail(rs.getString("email"));
-	        user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
-	        user.setCity(rs.getString("city"));
-	        user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+	        student.setFirstName(rs.getString("first_name"));
+	        student.setLastName(rs.getString("last_name"));
+	        student.setMobileNumber(rs.getLong("mobile_number"));
+	        student.setEmail(rs.getString("email"));
+	        student.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+	        student.setCity(rs.getString("city"));
+	        student.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
 
 	        
 	        try {
-	            user.setCreatedAt(rs.getTimestamp("created_at"));
-	            user.setFirstLogin(rs.getBoolean("is_first_login")); 
+	        	student.setCreatedAt(rs.getTimestamp("created_at"));
+	        	student.setFirstLogin(rs.getBoolean("is_first_login")); 
 	        } catch (SQLException e) {
 	           
 	        }

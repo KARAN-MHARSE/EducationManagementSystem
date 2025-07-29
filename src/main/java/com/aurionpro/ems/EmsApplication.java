@@ -13,8 +13,10 @@ public class EmsApplication{
 		System.out.println("Welcome");
 		Database.getConnection();
 		StudentController controller = new StudentController();
-		controller.addStudent();
-		controller.displayAllStudents();
+		//controller.addStudent();
+		//controller.displayAllStudents();
+		controller.assignCourseToStudent();
+		controller.viewCourseBYId();
 		
 		
 	}

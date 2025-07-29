@@ -11,7 +11,7 @@ import com.aurionpro.ems.Enum.Role;
 import com.aurionpro.ems.model.Student;
 import com.aurionpro.ems.model.User;
 import com.aurionpro.ems.services.IStudentService;
-import com.aurionpro.ems.services.StudentServiceImpl;
+import com.aurionpro.ems.services.implementation.*;
 import com.aurionpro.ems.utils.DataValidator;
 
 public class StudentController {
@@ -113,7 +113,7 @@ public class StudentController {
 		student.setRollNumber(rollNumber);
 		student.setYearOfStudy(yearOfStudy);
 		student.setAveragePercentage(BigDecimal.valueOf(percentage));
-		student.setUser(user); 
+		//student.setUser(user); 
 
 		
 		boolean success = studentService.addStudent(student);
@@ -128,26 +128,47 @@ public class StudentController {
 	    List<Student> students =studentService.getAllStudents();
 
 	    if (students.isEmpty()) {
-	        System.out.println("⚠️ No students found.");
+	        System.out.println(" No students found.");
 	        return;
 	    }
 
 	    System.out.println("==== Student List ====");
 	    for (Student student : students) {
-	        User user = student.getUser();
+	        //User user = student.getUser();
 	        System.out.println("Student ID     : " + student.getStudentId());
-	        System.out.println("Name           : " + user.getFirstName() + " " + user.getLastName());
-	        System.out.println("Email          : " + user.getEmail());
-	        System.out.println("Mobile         : " + user.getMobileNumber());
-	        System.out.println("City           : " + user.getCity());
-	        System.out.println("Gender         : " + user.getGender());
+	        System.out.println("Name           : " + student.getFirstName() + " " + student.getLastName());
+	        System.out.println("Email          : " + student.getEmail());
+	        System.out.println("Mobile         : " + student.getMobileNumber());
+	        System.out.println("City           : " + student.getCity());
+	        System.out.println("Gender         : " + student.getGender());
 	        System.out.println("Roll Number    : " + student.getRollNumber());
 	        System.out.println("Year of Study  : " + student.getYearOfStudy());
 	        System.out.println("Percentage     : " + student.getAveragePercentage());
-	        System.out.println("Created At     : " + user.getCreatedAt());
-	        System.out.println("First Login?   : " + user.isFirstLogin());
+	        System.out.println("Created At     : " + student.getCreatedAt());
+	        System.out.println("First Login?   : " + student.isFirstLogin());
 	        System.out.println("--------------------------");
 	    }
 	}
+	
+	public void assignCourseToStudent() {
+	    System.out.println("\n=========== Assign Course to Student ===========");
+
+	    int studentId = DataValidator.checkFormatInt(scanner, "Enter Student ID: ");
+	    int courseId = DataValidator.checkFormatInt(scanner, "Enter Course ID: ");
+
+	    boolean isAssigned = studentService.assignCourse(studentId, courseId);
+
+	    if (isAssigned) {
+	        System.out.println("Course assigned successfully to student.");
+	    } else {
+	        System.out.println(" Failed to assign course. Please check if Student ID and Course ID are valid.");
+	    }
+	}
+
+	public void viewCourseBYId() {
+		 int studentId = DataValidator.checkFormatInt(scanner, "Enter Student ID: ");
+		 studentService.viewCourseById(studentId);
+	}
+
 
 }

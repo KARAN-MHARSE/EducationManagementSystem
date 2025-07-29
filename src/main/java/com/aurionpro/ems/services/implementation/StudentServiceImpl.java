@@ -1,10 +1,11 @@
-package com.aurionpro.ems.services;
+package com.aurionpro.ems.services.implementation;
 
 import java.util.List;
 
 import com.aurionpro.ems.dao.IStudentDao;
 import com.aurionpro.ems.dao.implementation.StudentDaoImpl;
 import com.aurionpro.ems.model.Student;
+import com.aurionpro.ems.services.IStudentService;
 
 public class StudentServiceImpl implements IStudentService {
 
@@ -16,8 +17,8 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public boolean addStudent(Student student) {
-        // Step 1: Check if student already exists
-        String email = student.getUser().getEmail();
+        //  Check if student already exists
+        String email = student.getEmail();
         int rollNumber = student.getRollNumber();
 
         if (studentDao.isStudentExists(email, rollNumber)) {
@@ -25,7 +26,7 @@ public class StudentServiceImpl implements IStudentService {
             return false;
         }
 
-        // Step 2: Add the student if not already present
+        // Add the student if not already present
         return studentDao.addStudent(student);
     }
 
@@ -33,6 +34,18 @@ public class StudentServiceImpl implements IStudentService {
 	public List<Student> getAllStudents() {
 		// TODO Auto-generated method stub
 		return studentDao.getAllStudents();
+	}
+
+	@Override
+	public boolean assignCourse(int studentId, int courseId) {
+		
+		return studentDao.assignCourse(studentId, courseId);
+	}
+
+	@Override
+	public void viewCourseById(int studentId) {
+		// TODO Auto-generated method stub
+		 studentDao.viewCoursesByStudentId(studentId);
 	}
 
 }
