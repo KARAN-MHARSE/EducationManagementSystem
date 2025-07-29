@@ -117,7 +117,7 @@ public class StudentDaoImpl implements IStudentDao {
 	        return insertStmt.executeUpdate() > 0;
 
 	    } catch (SQLException e) {
-	        System.out.println("Error assigning course: " + e.getMessage());
+	        System.out.println("Error assigning course: " );
 	        return false;
 	    }
 	}
@@ -127,45 +127,36 @@ public class StudentDaoImpl implements IStudentDao {
 
 
 	@Override
-	public void viewCoursesByStudentId(int studentId) {
-	    String sql = "select sc.student_id,sc.course_id, c.name " +
+	public List<Course> viewCoursesByStudentId(int studentId) {
+	    List<Course> courses = new ArrayList<>();
+
+	    String sql = "select c.course_id, c.name, c.description, c.course_duration, c.created_at " +
 	                 "from ems.student_course sc " +
 	                 "join ems.course c ON sc.course_id = c.course_id " +
 	                 "where sc.student_id = ?";
 
 	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
 	        stmt.setInt(1, studentId);
 	        ResultSet rs = stmt.executeQuery();
 
-	        boolean found = false;
-
-	        System.out.println("\n Courses assigned to Student ID: " + studentId);
-	        System.out.println("-----------------------------------------");
-
 	        while (rs.next()) {
-	            int courseId = rs.getInt("course_id");
-	            String courseName = rs.getString("name");
+	            Course course = new Course();
+	            course.setCourseId(rs.getInt("course_id"));
+	            course.setName(rs.getString("name"));
+	            course.setDescription(rs.getString("description"));
+	            course.setCourseYear(rs.getInt("course_duration"));
+	            course.setCreatedAt(rs.getTimestamp("created_at"));
 
-	            System.out.println("Course ID   : " + courseId);
-	            System.out.println("Course Name : " + courseName);
-	            System.out.println("-----------------------------------------");
-	            found = true;
-	        }
-
-	        if (!found) {
-	            System.out.println(" No courses found for this student.");
+	            courses.add(course);
 	        }
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        System.out.println(" Error occurred while fetching courses.");
+	        System.out.println("Error fetching courses for student ID: " + studentId);
 	    }
+
+	    return courses;
 	}
-
-
-
-
 
 	
 	

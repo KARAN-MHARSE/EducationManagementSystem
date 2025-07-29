@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.aurionpro.ems.Enum.Gender;
 import com.aurionpro.ems.Enum.Role;
+import com.aurionpro.ems.model.Course;
 import com.aurionpro.ems.model.Student;
 import com.aurionpro.ems.model.User;
 import com.aurionpro.ems.services.IStudentService;
@@ -166,9 +167,26 @@ public class StudentController {
 	}
 
 	public void viewCourseBYId() {
-		 int studentId = DataValidator.checkFormatInt(scanner, "Enter Student ID: ");
-		 studentService.viewCourseById(studentId);
+	    int studentId = DataValidator.checkFormatInt(scanner, "Enter Student ID: ");
+	    List<Course> courses = studentService.viewCoursesByStudentId(studentId);
+
+	    if (courses == null || courses.isEmpty()) {
+	        System.out.println(" No courses found for this student.");
+	        return;
+	    }
+
+	    System.out.println("\n=========== Courses for Student ID: " + studentId + " ===========");
+	    for (Course course : courses) {
+	        System.out.println("Course ID     : " + course.getCourseId());
+	        System.out.println("Course Name   : " + course.getName());
+	        System.out.println("Description   : " + course.getDescription());
+	        System.out.println("Course Year   : " + course.getCourseYear());
+	        System.out.println("Created At    : " + course.getCreatedAt());
+	        System.out.println("-----------------------------");
+	    }
 	}
+
+
 
 
 }

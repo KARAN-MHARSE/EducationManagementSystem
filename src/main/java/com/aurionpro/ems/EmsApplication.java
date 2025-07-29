@@ -16,7 +16,7 @@ public class EmsApplication{
 		//controller.addStudent();
 		//controller.displayAllStudents();
 		controller.assignCourseToStudent();
-		controller.viewCourseBYId();
+		//controller.viewCourseBYId();
 		
 		
 	}

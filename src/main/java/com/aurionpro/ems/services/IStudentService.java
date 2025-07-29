@@ -2,6 +2,7 @@ package com.aurionpro.ems.services;
 
 import java.util.List;
 
+import com.aurionpro.ems.model.Course;
 import com.aurionpro.ems.model.Student;
 
 public interface IStudentService {
@@ -11,6 +12,6 @@ public interface IStudentService {
 
 	public boolean assignCourse(int studentId, int courseId);
 
-	public void viewCourseById(int studentId);
+	List<Course> viewCoursesByStudentId(int studentId);
 
 }
