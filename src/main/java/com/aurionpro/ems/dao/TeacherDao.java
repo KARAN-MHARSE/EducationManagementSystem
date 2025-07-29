@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.aurionpro.ems.database.Database;
 import com.aurionpro.ems.model.Teacher;
@@ -56,17 +54,37 @@ public class TeacherDao {
 	}
 
 	public void showAllTeachers() {
-		try {
-//			Connection connection = Database.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement("select * from ems.teacher");
-			ResultSet resultset = preparedStatement.executeQuery();
-			while (resultset.next()) {
-				System.out.println(resultset.getInt(1) + "\t" + resultset.getInt(2) + "\t" + resultset.getString(3)
-						+ "\t" + resultset.getInt(4));
+
+		String query = "SELECT t.teacher_id, u.first_name, u.last_name, u.email, t.qualification, t.experience FROM ems.teacher t JOIN ems.user u ON t.user_id = u.user_id";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+
+			System.out.println(
+					"+------------+----------------------+---------------------------+----------------------+------------+");
+			System.out.println(
+					"| Teacher ID | Name                 | Email                     | Qualification        | Experience |");
+			System.out.println(
+					"+------------+----------------------+---------------------------+----------------------+------------+");
+
+			while (resultSet.next()) {
+				int teacherId = resultSet.getInt("teacher_id");
+				String fullName = resultSet.getString("first_name") + " " + resultSet.getString("last_name");
+				String email = resultSet.getString("email");
+				String qualification = resultSet.getString("qualification");
+				int experience = resultSet.getInt("experience");
+
+				System.out.printf("| %-10d | %-20s | %-25s | %-20s | %-10d |\n", teacherId, fullName, email,
+						qualification, experience);
 			}
+
+			System.out.println(
+					"+------------+----------------------+---------------------------+----------------------+------------+");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public void getMetaData() {
@@ -87,36 +105,53 @@ public class TeacherDao {
 
 	}
 
-	public List<Integer> getAllTeacherIds() {
-		List<Integer> ids = new ArrayList<>();
-		String query = "SELECT teacher_id FROM ems.teacher";
+	public void printAllTeacherDetails() {
+		String query = "SELECT t.teacher_id, u.first_name, u.last_name " + "FROM ems.teacher t "
+				+ "JOIN ems.user u ON t.user_id = u.user_id";
 
-		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+		try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+			System.out.println("======================================");
+			System.out.println("         Teacher Details");
+			System.out.println("======================================");
+			System.out.printf("%-15s%-30s%n", "Teacher ID", "Full Name");
+			System.out.println("--------------------------------------");
 
 			while (rs.next()) {
-				ids.add(rs.getInt(1));
+				int teacherId = rs.getInt("teacher_id");
+				String fullName = rs.getString("first_name") + " " + rs.getString("last_name");
+				System.out.printf("%-15d%-30s%n", teacherId, fullName);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		return ids;
+			System.out.println("======================================");
+
+		} catch (SQLException e) {
+			System.out.println("Failed to load teacher details: " + e.getMessage());
+		}
 	}
 
-	public List<Integer> getAllSubjectIds() {
-		List<Integer> ids = new ArrayList<>();
-		String query = "SELECT subject_id FROM ems.subject";
+	public void printAllSubjectDetails() {
+		String query = "SELECT subject_id, name FROM ems.subject";
 
-		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+		try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+			System.out.println("======================================");
+			System.out.println("         Subject Details");
+			System.out.println("======================================");
+			System.out.printf("%-15s%-30s%n", "Subject ID", "Subject Name");
+			System.out.println("--------------------------------------");
 
 			while (rs.next()) {
-				ids.add(rs.getInt(1));
+				int subjectId = rs.getInt("subject_id");
+				String subjectName = rs.getString("name");
+				System.out.printf("%-15d%-30s%n", subjectId, subjectName);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		return ids;
+			System.out.println("======================================");
+
+		} catch (SQLException e) {
+			System.out.println("Failed to load subject details: " + e.getMessage());
+		}
 	}
 
 	public boolean assignSubjectToTeacher(int teacherId, int subjectId) {
@@ -139,38 +174,62 @@ public class TeacherDao {
 
 		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
-			System.out.println("Subject ID\tName\tCourse ID");
+			System.out.println("==============================================================");
+			System.out.println("                     All Subject Details");
+			System.out.println("==============================================================");
+			System.out.printf("%-15s%-30s%-15s%n", "Subject ID", "Subject Name", "Course ID");
+			System.out.println("--------------------------------------------------------------");
+
 			while (rs.next()) {
-				System.out
-						.println(rs.getInt("subject_id") + "\t" + rs.getString("name") + "\t" + rs.getInt("course_id"));
+				int subjectId = rs.getInt("subject_id");
+				String subjectName = rs.getString("name");
+				int courseId = rs.getInt("course_id");
+				System.out.printf("%-15d%-30s%-15d%n", subjectId, subjectName, courseId);
 			}
+
+			System.out.println("==============================================");
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Failed to load subject details: " + e.getMessage());
 		}
 	}
 
-	public int getSubjectsByTeacherId(int teacherId) {
-		String query = "SELECT s.subject_id, s.name, s.course_id FROM ems.subject s JOIN ems.teacher_subject_assignment tsa ON s.subject_id = tsa.subject_id WHERE tsa.teacher_id = ?";
+	public void getSubjectsByTeacherId(int teacherId) {
+		String query = "SELECT s.subject_id, s.name, s.course_id " + "FROM ems.subject s "
+				+ "JOIN ems.teacher_subject_assignment tsa ON s.subject_id = tsa.subject_id "
+				+ "WHERE tsa.teacher_id = ?";
 		int count = 0;
 
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setInt(1, teacherId);
 			ResultSet rs = pstmt.executeQuery();
 
-			System.out.println("Subject ID\tName\tCourse ID");
 			while (rs.next()) {
+				if (count == 0) {
+					System.out.println("==============================================");
+					System.out.println("         Subjects Assigned to Teacher");
+					System.out.println("==============================================");
+					System.out.printf("%-15s%-30s%-15s%n", "Subject ID", "Subject Name", "Course ID");
+					System.out.println("--------------------------------------------------------------");
+				}
+
 				int subjectId = rs.getInt("subject_id");
 				String name = rs.getString("name");
 				int courseId = rs.getInt("course_id");
 
-				System.out.println(subjectId + "\t" + name + "\t" + courseId);
+				System.out.printf("%-15d%-30s%-15d%n", subjectId, name, courseId);
 				count++;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		return count;
+			if (count > 0) {
+				System.out.println("==============================================");
+			} else {
+				System.out.println("No subjects assigned to this teacher.");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Failed to retrieve subjects: " + e.getMessage());
+		}
 
 	}
 

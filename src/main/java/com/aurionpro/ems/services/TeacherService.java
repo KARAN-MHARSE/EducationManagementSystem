@@ -78,18 +78,8 @@ public class TeacherService {
 	}
 
 	public void assignSubject() {
-		List<Integer> teacherIds = teacherDao.getAllTeacherIds();
-		List<Integer> subjectIds = teacherDao.getAllSubjectIds();
-
-		System.out.println("Available Teacher IDs:");
-		for (int id : teacherIds) {
-			System.out.println("Teacher ID: " + id);
-		}
-
-		System.out.println("Available Subject IDs:");
-		for (int id : subjectIds) {
-			System.out.println("Subject ID: " + id);
-		}
+		teacherDao.printAllTeacherDetails();
+		teacherDao.printAllSubjectDetails();
 
 		System.out.println("Enter Teacher ID to assign:");
 		int teacherId = Integer.parseInt(scanner.nextLine());
@@ -110,30 +100,18 @@ public class TeacherService {
 		if (choice == 1) {
 			teacherDao.showAllSubjects();
 		} else if (choice == 2) {
+			teacherDao.printAllTeacherDetails();
 			System.out.println("Enter Teacher ID:");
 			int teacherId = Integer.parseInt(scanner.nextLine());
 
-			int count = teacherDao.getSubjectsByTeacherId(teacherId);
-			if (count == 0) {
-				System.out.println("No subjects assigned to this teacher.");
-			}
+			teacherDao.getSubjectsByTeacherId(teacherId);
 		} else {
 			System.out.println("Invalid choice.");
 		}
 	}
 
 	public void searchATeacher() {
-		List<Integer> teacherIds = teacherDao.getAllTeacherIds();
-
-		if (teacherIds.isEmpty()) {
-			System.out.println("No teachers found in the system.");
-			return;
-		}
-
-		System.out.println("Available Teacher IDs:");
-		for (int id : teacherIds) {
-			System.out.println("Teacher ID: " + id);
-		}
+		teacherDao.printAllTeacherDetails();
 
 		System.out.println("Enter the Teacher ID to view details:");
 		int teacherId = Integer.parseInt(scanner.nextLine());
