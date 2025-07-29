@@ -1,10 +1,9 @@
 package com.aurionpro.ems.model;
 
-import java.sql.Timestamp;
-
-import javax.management.relation.Role;
+import java.util.Date;
 
 import com.aurionpro.ems.Enum.Gender;
+import com.aurionpro.ems.Enum.Role;
 
 public class Authentication extends User{
 
@@ -30,7 +29,7 @@ public class Authentication extends User{
 		this.password = password;
 	}
 	public Authentication(String firstName, String lastName, long mobileNumber, String email,
-			Gender gender, String city, Role role, Timestamp createdAt, boolean isFirstLogin, int authId,
+			Gender gender, String city, Role role, Date createdAt, boolean isFirstLogin, int authId,
 			String username, String password) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 		this.authId = authId;
@@ -38,7 +37,7 @@ public class Authentication extends User{
 		this.password = password;
 	}
 	public Authentication(String firstName, String lastName, long mobileNumber, String email,
-			Gender gender, String city, Role role, Timestamp createdAt, boolean isFirstLogin) {
+			Gender gender, String city, Role role, Date createdAt, boolean isFirstLogin) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 	}
 

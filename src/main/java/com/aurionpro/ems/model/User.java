@@ -1,10 +1,9 @@
 package com.aurionpro.ems.model;
 
-import java.sql.Timestamp;
-
-import javax.management.relation.Role;
+import java.util.Date;
 
 import com.aurionpro.ems.Enum.Gender;
+import com.aurionpro.ems.Enum.Role;
 
 public class User {
 
@@ -15,7 +14,7 @@ public class User {
     private Gender gender;
     private String city;
     private Role role;
-    private Timestamp createdAt;
+    private Date createdAt;
     private boolean isFirstLogin;
 
 	public String getFirstName() {
@@ -60,10 +59,10 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public Timestamp getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 	public boolean isFirstLogin() {
@@ -73,7 +72,7 @@ public class User {
 		this.isFirstLogin = isFirstLogin;
 	}
 	public User(String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Timestamp createdAt, boolean isFirstLogin) {
+			String city, Role role, Date createdAt, boolean isFirstLogin) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -88,5 +87,4 @@ public class User {
 	public User() {
 		super();
 	}
-
 }

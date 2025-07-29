@@ -1,15 +1,14 @@
 package com.aurionpro.ems.model;
 
-import java.sql.Timestamp;
-
-import javax.management.relation.Role;
+import java.util.Date;
 
 import com.aurionpro.ems.Enum.Gender;
+import com.aurionpro.ems.Enum.Role;
 
 public class Teacher extends User{
 
 	private int teacherId;
-    private int subjectId;
+//    private int subjectId;
     private String qualification;
     private int experience;
 	public int getTeacherId() {
@@ -18,12 +17,12 @@ public class Teacher extends User{
 	public void setTeacherId(int teacherId) {
 		this.teacherId = teacherId;
 	}
-	public int getSubjectId() {
-		return subjectId;
-	}
-	public void setSubjectId(int subjectId) {
-		this.subjectId = subjectId;
-	}
+//	public int getSubjectId() {
+//		return subjectId;
+//	}
+//	public void setSubjectId(int subjectId) {
+//		this.subjectId = subjectId;
+//	}
 	public String getQualification() {
 		return qualification;
 	}
@@ -37,18 +36,16 @@ public class Teacher extends User{
 		this.experience = experience;
 	}
 	public Teacher(String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Timestamp createdAt, boolean isFirstLogin, int subjectId,
+			String city, Role role, Date createdAt, boolean isFirstLogin, 
 			String qualification, int experience) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
-		this.subjectId = subjectId;
+//		this.subjectId = subjectId;
 		this.qualification = qualification;
 		this.experience = experience;
 	}
 	public Teacher(String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Timestamp createdAt, boolean isFirstLogin) {
+			String city, Role role, Date createdAt, boolean isFirstLogin) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 	}
-    
-    
 
 }

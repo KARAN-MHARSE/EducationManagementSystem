@@ -1,11 +1,10 @@
 package com.aurionpro.ems.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-
-import javax.management.relation.Role;
+import java.util.Date;
 
 import com.aurionpro.ems.Enum.Gender;
+import com.aurionpro.ems.Enum.Role;
 
 public class Student extends User {
 
@@ -13,7 +12,7 @@ public class Student extends User {
 	private int rollNumber;
 	private BigDecimal averagePercentage;
 	private int yearOfStudy;
-	private Course course_ID;
+	private int course_ID;
 
 	public int getStudentId() {
 		return studentId;
@@ -47,27 +46,27 @@ public class Student extends User {
 		this.yearOfStudy = yearOfStudy;
 	}
 
-	public Course getCourse_ID() {
+	public int getCourse_ID() {
 		return course_ID;
 	}
 
-	public void setCourse_ID(Course course_ID) {
+	public void setCourse_ID(int course_ID) {
 		this.course_ID = course_ID;
 	}
 
 	public Student(String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Timestamp createdAt, boolean isFirstLogin, int studentId, int rollNumber,
-			BigDecimal averagePercentage, int yearOfStudy, Course course_ID) {
+			String city, Role role, Date createdAt, boolean isFirstLogin, int studentId, int rollNumber,
+			BigDecimal averagePercentage, int yearOfStudy, int course_ID) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 		this.studentId = studentId;
 		this.rollNumber = rollNumber;
 		this.averagePercentage = averagePercentage;
 		this.yearOfStudy = yearOfStudy;
-		this.setCourse_ID(null);
+		this.course_ID=course_ID;
 	}
 
 	public Student(String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Timestamp createdAt, boolean isFirstLogin) {
+			String city, Role role, Date createdAt, boolean isFirstLogin) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 	}
 
