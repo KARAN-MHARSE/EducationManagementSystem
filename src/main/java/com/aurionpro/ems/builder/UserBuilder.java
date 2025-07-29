@@ -22,6 +22,7 @@ public class UserBuilder {
 	private Role role;
 	private Date createdAt;
 	private boolean isFirstLogin;
+	private boolean isActive;
 
 	private int studentId;
 	private int rollNumber;
@@ -68,6 +69,12 @@ public class UserBuilder {
 
 	public UserBuilder setCity(String city) {
 		this.city = city;
+		return this;
+	}
+
+
+	public UserBuilder setActive(boolean isActive) {
+		this.isActive = isActive;
 		return this;
 	}
 
@@ -138,7 +145,7 @@ public class UserBuilder {
 
 
 	public Student getStudent() {
-		Student student = new Student(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, rollNumber, averagePercentage, yearOfStudy, course_ID);
+		Student student = new Student(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, rollNumber, averagePercentage, yearOfStudy, course_ID,isActive);
 		student.setStudentId(studentId);
 		student.setCreatedAt(createdAt);
 		return student;

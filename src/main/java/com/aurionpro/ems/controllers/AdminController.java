@@ -3,11 +3,23 @@ package com.aurionpro.ems.controllers;
 import java.util.Scanner;
 
 import com.aurionpro.ems.EmsApplication;
+import com.aurionpro.ems.services.CourseService;
 import com.aurionpro.ems.services.StudentService;
+import com.aurionpro.ems.services.TeacherService;
 
 public class AdminController {
+	private StudentService studentService;
+	private TeacherService teacherService;
+	private CourseService courseService;
 
-	public static void showMenu(Scanner scanner) {
+	
+	public AdminController(StudentService studentService,TeacherService teacherService) {
+		this.studentService = studentService;
+		this.teacherService = teacherService;
+		this.courseService = new CourseService();
+	}
+
+	public  void showMenu(Scanner scanner) {
 		System.out
 				.println("👋 Welcome, Admin! You now have full access to manage users, courses, and system settings.");
 
@@ -17,8 +29,9 @@ public class AdminController {
 			System.out.println("Enter choice code " 
 							+ "\n1. DashBoard " 
 							+ "\n2. Student Management "
-							+ "\n3. Teacher Management " 
-							+ "\n4. Log out");
+							+ "\n3. Teacher Management "
+							+ "\n4. Course Management" 
+							+ "\n5. Log out");
 			try {
 				int choice = scanner.nextInt();
 				scanner.nextLine();
@@ -34,6 +47,9 @@ public class AdminController {
 					printTeacherManageMenu(scanner);
 					break;
 				case 4:
+					printCourseManagementMenu(scanner);
+					break;
+				case 5:
 					isContinue = false;
 					EmsApplication.currentUser = null;
 					System.out.println("Successfully logged out,Thank you!");
@@ -51,7 +67,62 @@ public class AdminController {
 
 	}
 
-	private static void printTeacherManageMenu(Scanner scanner) {
+	private void printCourseManagementMenu(Scanner scanner) {
+		boolean isContinue = true;
+
+		while (isContinue) {
+			System.out.println("Enter choice code " 
+					+ "\n1. View All Courses " 
+					+ "\n2. Add New Course "
+					+ "\n3. Add Subjects in A Course  "
+					+ "\n4. View Subjects of A Course" 
+					+ "\n5. Search A Course "
+					+ "\n6. Delete A Course "
+					+ "\n7. View Subjects of A Course "
+					+ "\n8. Go Back "
+					+ "\n9. Go Back");
+			try {
+				int choice = scanner.nextInt();
+				scanner.nextLine();
+
+				switch (choice) {
+				case 1:
+					System.out.println("AddNewSTudent");
+					break;
+				case 2:
+					System.out.println("Show all STudent");
+					studentService.printAllStudents();
+					break;
+				case 3:
+					System.out.println("Search student");
+					studentService.getStudent(scanner);
+					break;
+				case 4:
+					studentService.deleteStudent(scanner);
+					break;
+				case 5:
+					System.out.println("Assign course to student");
+					break;
+				case 6:
+					System.out.println("View assigned course to a student");
+					break;
+				case 9:
+					isContinue = false;
+					break;
+				default:
+					System.out.println("Enter valid choice code");
+					break;
+				}
+			} catch (NumberFormatException e) {
+				System.err.println(e.getMessage());
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+		}
+		
+	}
+
+	private  void printTeacherManageMenu(Scanner scanner) {
 		boolean isContinue = true;
 
 		while (isContinue) {
@@ -99,7 +170,7 @@ public class AdminController {
 
 	}
 
-	private static void printStudentManageMenu(Scanner scanner) {
+	private  void printStudentManageMenu(Scanner scanner) {
 		boolean isContinue = true;
 
 		while (isContinue) {
@@ -116,12 +187,14 @@ public class AdminController {
 					break;
 				case 2:
 					System.out.println("Show all STudent");
+					studentService.printAllStudents();
 					break;
 				case 3:
 					System.out.println("Search student");
+					studentService.getStudent(scanner);
 					break;
 				case 4:
-					System.out.println("Delete student");
+					studentService.deleteStudent(scanner);
 					break;
 				case 5:
 					System.out.println("Assign course to student");

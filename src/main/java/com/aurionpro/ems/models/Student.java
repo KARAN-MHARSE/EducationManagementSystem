@@ -20,8 +20,8 @@ public class Student extends User {
 
 	public Student(int userId, String firstName, String lastName, long mobileNumber, String email, Gender gender,
 			String city, Role role, Date createdAt, boolean isFirstLogin, int rollNumber,
-			BigDecimal averagePercentage, int yearOfStudy, int course_ID) {
-		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
+			BigDecimal averagePercentage, int yearOfStudy, int course_ID,boolean isActive) {
+		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin,isActive);
 		this.rollNumber = rollNumber;
 		this.averagePercentage = averagePercentage;
 		this.yearOfStudy = yearOfStudy;
@@ -66,6 +66,12 @@ public class Student extends User {
 
 	public void setCourse_ID(int course_ID) {
 		this.course_ID = course_ID;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [studentId=" + studentId + ", rollNumber=" + rollNumber + ", averagePercentage="
+				+ averagePercentage + ", yearOfStudy=" + yearOfStudy + ", course_ID=" + course_ID + "]";
 	}
 
 	

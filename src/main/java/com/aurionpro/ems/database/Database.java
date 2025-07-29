@@ -22,7 +22,6 @@ public class Database {
 				System.out.println(e.getMessage());
 			}
 		}
-		System.out.println("Connected");
 		return connection;
 		
 	}

@@ -5,35 +5,36 @@ import java.util.Scanner;
 import com.aurionpro.ems.services.AuthenticationService;
 
 public class AuthenticationController {
-	
-	public static void showAuthenticationMenu(Scanner scanner) {
+	private final AuthenticationService authenticationService;
+
+	public AuthenticationController(AuthenticationService authenticationService) {
+		this.authenticationService = authenticationService;
+	}
+
+	public void showAuthenticationMenu(Scanner scanner) {
 		boolean isContinue = true;
-		
-		while(isContinue) {
-			System.out.println("Choose "
-					+ "\n1. Login"
-					+ " \n2. Change Password");
-			
+
+		while (isContinue) {
+			System.out.println("Choose " + "\n1. Login" + " \n2. Change Password");
+
 			try {
-				int choice =  scanner.nextInt();
+				int choice = scanner.nextInt();
 				scanner.nextLine();
-				
+
 				switch (choice) {
 				case 1:
-					AuthenticationService.login(scanner);
-					
+					authenticationService.login(scanner);
+
 					break;
 
 				default:
 					break;
 				}
-				
-			} 
-			catch (NumberFormatException e) {
+
+			} catch (NumberFormatException e) {
 				e.printStackTrace();
 				System.err.println(e.getMessage());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				System.err.println(e.getMessage());
 			}

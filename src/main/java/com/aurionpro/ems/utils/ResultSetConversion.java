@@ -10,6 +10,7 @@ import com.aurionpro.ems.builder.UserBuilder;
 import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
 import com.aurionpro.ems.models.Student;
+import com.google.protobuf.Timestamp;
 
 public class ResultSetConversion {
 	public static List<Student> convertStudentresultSetSetToStudentList(ResultSet resultSet) throws SQLException {
@@ -17,18 +18,19 @@ public class ResultSetConversion {
 
 		while(resultSet.next()) {
 			Student student = null;
-			
+						
 			UserBuilder userBuilder = new UserBuilder();
 			student = userBuilder.setUserId(resultSet.getInt("user_id"))
-					.setFirstName(resultSet.getString("firesultSett_name")).setLastName(resultSet.getString("last_name"))
+					.setFirstName(resultSet.getString("first_name")).setLastName(resultSet.getString("last_name"))
 					.setMobileNumber(resultSet.getLong("mobile_number")).setEmail(resultSet.getString("email"))
 					.setGender(Gender.valueOf(resultSet.getString("gender"))).setCity(resultSet.getString("city"))
 					.setRole(Role.valueOf(resultSet.getString("role")))
-					.setCreatedAt(new Date(resultSet.getTimestamp("created_at").getTime()))
-					.setFirstLogin(resultSet.getBoolean("is_firesultSett_login"))
+					.setFirstLogin(resultSet.getBoolean("is_first_login"))
 					.setStudentId(resultSet.getInt("student_id")).setRollNumber(resultSet.getInt("roll_number"))
 					.setAveragePercentage(resultSet.getBigDecimal("average_percentage"))
-					.setYearOfStudy(resultSet.getInt("year_of_study")).getStudent();
+					.setYearOfStudy(resultSet.getInt("year_of_study"))
+					.setActive(resultSet.getBoolean("isActive"))
+					.getStudent();
 			
 			students.add(student);		
 		}

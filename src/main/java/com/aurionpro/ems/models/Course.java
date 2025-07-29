@@ -6,18 +6,42 @@ import com.google.protobuf.Timestamp;
 
 public class Course {
 
+	@Override
+	public String toString() {
+		return "Course [courseId=" + courseId + ", name=" + name + ", description=" + description + ", courseYear="
+				+ courseYear + ", createdAt=" + createdAt + ", isDeleted=" + isDeleted + "]";
+	}
+
+
+
 	private int courseId;
 	private String name;
 	private String description;
 	private int courseYear;
 	private Timestamp createdAt;
+	private boolean isDeleted;
 	
-	public Course(String name, String description, int courseYear, Timestamp createdAt) {
+	public Course(String name, String description, int courseYear, Timestamp createdAt,Boolean isDeleted) {
 		this.name = name;
 		this.description = description;
 		this.courseYear = courseYear;
 		this.createdAt = createdAt;
+		this.isDeleted = isDeleted;
 	}
+	
+	 
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+
 
 	public int getCourseId() {
 		return courseId;

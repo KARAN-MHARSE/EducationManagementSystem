@@ -9,15 +9,26 @@ import java.util.Scanner;
 import com.aurionpro.ems.controllers.AdminController;
 import com.aurionpro.ems.controllers.StudentController;
 import com.aurionpro.ems.controllers.TeacherController;
+import com.aurionpro.ems.dao.implementation.StudentDaoImpl;
 import com.aurionpro.ems.database.Database;
 import com.aurionpro.ems.enums.Role;
 import com.aurionpro.ems.exceptions.AuthenticationException;
 import com.aurionpro.ems.exceptions.DataValidationException;
 
 public class AuthenticationService {
-	static Connection connection = Database.getConnection();
+	private final Connection connection = Database.getConnection();
+	private AdminController adminController;
+	private StudentController studentController;
+	private TeacherController teacherController;
+	
+	public AuthenticationService() {
+		StudentService studentService = new StudentService(new StudentDaoImpl());
+		TeacherService teacherService = new TeacherService();
+		
+		adminController = new AdminController(studentService,teacherService);
+	}
 
-	public static void login(Scanner scanner) throws SQLException {
+	public  void login(Scanner scanner) throws SQLException {
 		System.out.println("Enter the email");
 		String email = scanner.nextLine();
 		
@@ -51,7 +62,7 @@ public class AuthenticationService {
 			TeacherController.showMenu(scanner);
 			break;
 		case Admin:
-			AdminController.showMenu(scanner);
+			adminController.showMenu(scanner);
 			break;
 		default:
 			System.out.println("Something went wrong");

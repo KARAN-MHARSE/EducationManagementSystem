@@ -3,7 +3,6 @@ package com.aurionpro.ems.models;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-
 import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
 
@@ -19,9 +18,10 @@ public class User {
 	private Role role;
 	private Date createdAt;
 	private boolean isFirstLogin;
+	private boolean isActive;
 
 	public User(int userId, String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Date createdAt, boolean isFirstLogin) {
+			String city, Role role, Date createdAt, boolean isFirstLogin, boolean isActive) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -33,6 +33,19 @@ public class User {
 		this.role = role;
 		this.createdAt = createdAt;
 		this.isFirstLogin = isFirstLogin;
+		this.isActive = isActive;
+	}
+
+	public boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public User() {
