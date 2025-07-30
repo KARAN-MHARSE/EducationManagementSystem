@@ -31,10 +31,12 @@ public class EmsApplication {
 		System.out.println("Welcome to College Management System");
 		
 		
-		AuthenticationController authenticationController = new AuthenticationController(new AuthenticationService());
-
-		authenticationController.showAuthenticationMenu(scanner);
+//		AuthenticationController authenticationController = new AuthenticationController(new AuthenticationService());
+//		authenticationController.showAuthenticationMenu(scanner);
 		
+		
+		AdminController adminController = new AdminController(new StudentService(new StudentDaoImpl()), new TeacherService());
+		adminController.printCourseManagementMenu(scanner);
 	
 	}
 }

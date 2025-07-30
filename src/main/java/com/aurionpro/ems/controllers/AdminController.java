@@ -3,6 +3,7 @@ package com.aurionpro.ems.controllers;
 import java.util.Scanner;
 
 import com.aurionpro.ems.EmsApplication;
+import com.aurionpro.ems.dao.implementation.CourseDaoImplementation;
 import com.aurionpro.ems.services.CourseService;
 import com.aurionpro.ems.services.StudentService;
 import com.aurionpro.ems.services.TeacherService;
@@ -16,7 +17,7 @@ public class AdminController {
 	public AdminController(StudentService studentService,TeacherService teacherService) {
 		this.studentService = studentService;
 		this.teacherService = teacherService;
-		this.courseService = new CourseService();
+		this.courseService = new CourseService(new CourseDaoImplementation());
 	}
 
 	public  void showMenu(Scanner scanner) {
@@ -67,7 +68,7 @@ public class AdminController {
 
 	}
 
-	private void printCourseManagementMenu(Scanner scanner) {
+	public void printCourseManagementMenu(Scanner scanner) {
 		boolean isContinue = true;
 
 		while (isContinue) {
@@ -87,24 +88,22 @@ public class AdminController {
 
 				switch (choice) {
 				case 1:
-					System.out.println("AddNewSTudent");
+					courseService.viewAllCourses();
 					break;
 				case 2:
-					System.out.println("Show all STudent");
-					studentService.printAllStudents();
+					courseService.addNewCourse(scanner);
 					break;
 				case 3:
-					System.out.println("Search student");
-					studentService.getStudent(scanner);
+					courseService.addSubjectsInCourse(scanner);
 					break;
 				case 4:
-					studentService.deleteStudent(scanner);
+					courseService.viewSubjectsOfCourse(scanner);
 					break;
 				case 5:
-					System.out.println("Assign course to student");
+					courseService.viewACoursesById(scanner);
 					break;
 				case 6:
-					System.out.println("View assigned course to a student");
+					courseService.deleteCourseById(scanner);
 					break;
 				case 9:
 					isContinue = false;
@@ -114,8 +113,10 @@ public class AdminController {
 					break;
 				}
 			} catch (NumberFormatException e) {
+				e.printStackTrace();
 				System.err.println(e.getMessage());
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.err.println(e.getMessage());
 			}
 		}

@@ -9,6 +9,7 @@ import java.util.List;
 import com.aurionpro.ems.builder.UserBuilder;
 import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
+import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Student;
 import com.google.protobuf.Timestamp;
 
@@ -40,6 +41,18 @@ public class ResultSetConversion {
 	}
 	
 	
-	
+	public static List<Course> convertCourseResultSetSetToStudentList(ResultSet resultSet) throws SQLException {
+		List<Course> courses = new ArrayList<Course>();
+		
+		while (resultSet.next()) {
+			Course course = new Course();
+			course.setCourseId(resultSet.getInt("course_id"));
+			course.setName(resultSet.getString("name"));
+		
+			courses.add(course);
+	}
+		return courses;
+	}
+
 	
 }
