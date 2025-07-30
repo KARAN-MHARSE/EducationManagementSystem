@@ -2,6 +2,7 @@ package com.aurionpro.ems;
 
 import java.util.List;
 
+import com.aurionpro.ems.controllers.FeeController;
 import com.aurionpro.ems.controllers.StudentController;
 import com.aurionpro.ems.dao.IStudentDao;
 import com.aurionpro.ems.dao.implementation.StudentDaoImpl;
@@ -13,11 +14,19 @@ public class EmsApplication{
 		System.out.println("Welcome");
 		Database.getConnection();
 		StudentController controller = new StudentController();
+		FeeController feeController = new FeeController();
 		//controller.addStudent();
 		//controller.displayAllStudents();
-		controller.assignCourseToStudent();
+		//controller.assignCourseToStudent();
 		//controller.viewCourseBYId();
-		
+		//feeController.viewFeeByStudentId();
+		//feeController.viewCourseFeeById();
+		//feeController.updateFeeById();
+		//2
+		//feeController.getTotalEarning();
+		//feeController.getStudentsWithPendingFees();		
+		//feeController.getStudentsWithTotalPaidFees();
+		feeController.start();
 		
 	}
 }

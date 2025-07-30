@@ -1,22 +1,14 @@
 package com.aurionpro.ems.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class Course {
-
 	private int courseId;
 	private String name;
 	private String description;
 	private int courseYear;
-	private Timestamp createdAt;
-
-	public int getCourseId() {
-		return courseId;
-	}
-
-	public void setCourseId(int courseId) {
-		this.courseId = courseId;
-	}
+	private Date createdAt;
+	private Double courseFee;
 
 	public String getName() {
 		return name;
@@ -42,26 +34,41 @@ public class Course {
 		this.courseYear = courseYear;
 	}
 
-	public Timestamp getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Course(int courseId, String name, String description, int courseYear, Timestamp createdAt) {
+	public Course(String name, String description, int courseYear, Date createdAt, Double courseFee) {
 		super();
-		this.courseId = courseId;
 		this.name = name;
 		this.description = description;
 		this.courseYear = courseYear;
 		this.createdAt = createdAt;
+		this.courseFee = courseFee;
 	}
 
 	public Course() {
 		super();
 	}
 
-	
+	public Double getCourseFee() {
+		return courseFee;
+	}
+
+	public void setCourseFee(Double courseFee) {
+		this.courseFee = courseFee;
+	}
+
+	public int getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(int course_id) {
+		this.courseId = course_id;
+	}
+
 }
