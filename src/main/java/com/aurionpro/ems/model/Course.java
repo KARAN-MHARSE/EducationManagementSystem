@@ -8,7 +8,8 @@ public class Course {
 	private String description;
 	private int courseYear;
 	private Date createdAt;
-	
+	private Double courseFee;
+
 	public String getName() {
 		return name;
 	}
@@ -41,17 +42,25 @@ public class Course {
 		this.createdAt = createdAt;
 	}
 
-	public Course(String name, String description, int courseYear, Date createdAt) {
+	public Course(String name, String description, int courseYear, Date createdAt, Double courseFee) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.courseYear = courseYear;
 		this.createdAt = createdAt;
+		this.courseFee = courseFee;
 	}
 
 	public Course() {
 		super();
 	}
 
-	
+	public Double getCourseFee() {
+		return courseFee;
+	}
+
+	public void setCourseFee(Double courseFee) {
+		this.courseFee = courseFee;
+	}
+
 }

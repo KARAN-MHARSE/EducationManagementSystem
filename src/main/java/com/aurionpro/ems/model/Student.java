@@ -69,5 +69,9 @@ public class Student extends User {
 			String city, Role role, Date createdAt, boolean isFirstLogin) {
 		super(firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
 	}
+	
+	public Student() {
+		super();
+	}
 
 }
