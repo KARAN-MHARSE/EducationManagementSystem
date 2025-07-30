@@ -65,7 +65,7 @@ public class StudentController {
 			System.out.print("Enter email: ");
 			email = scanner.nextLine();
 			if (!DataValidator.isValidEmail(email)) {
-				System.out.println("❌ Invalid email format!");
+				System.out.println(" Invalid email format!");
 			}
 		} while (!DataValidator.isValidEmail(email));
 
@@ -81,10 +81,10 @@ public class StudentController {
 		while (true) {
 			int genderChoice = DataValidator.checkFormatInt(scanner, "Enter choice (1 or 2): ");
 			if (genderChoice == 1) {
-				gender = Gender.MALE;
+				gender = Gender.Male;
 				break;
 			} else if (genderChoice == 2) {
-				gender = Gender.FEMALE;
+				gender = Gender.Female;
 				break;
 			} else {
 				System.out.println("Invalid choice. Please select 1 for Male or 2 for Female.");
@@ -95,35 +95,31 @@ public class StudentController {
 		int yearOfStudy = DataValidator.checkFormatInt(scanner, "Enter year of study: ");
 		double percentage = DataValidator.checkFormatDouble(scanner, "Enter average percentage: ");
 
-		// Set User object
-		User user = new User();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setMobileNumber(mobile);
-		user.setEmail(email);
-		user.setCity(city);
-		user.setGender(gender);
-		user.setRole(Role.STUDENT);
-		user.setCreatedAt(new Timestamp(new Date().getTime()));
-		user.setFirstLogin(true);  
-		user.setActive(true);      
-
-
-		
+		// Create and populate Student object (inherits from User)
 		Student student = new Student();
+		student.setFirstName(firstName);
+		student.setLastName(lastName);
+		student.setMobileNumber(mobile);
+		student.setEmail(email);
+		student.setCity(city);
+		student.setGender(gender);
+		student.setRole(Role.Student);
+		student.setCreatedAt(new Timestamp(new Date().getTime()));
+		student.setFirstLogin(true);
+		student.setActive(true);
+
 		student.setRollNumber(rollNumber);
 		student.setYearOfStudy(yearOfStudy);
 		student.setAveragePercentage(BigDecimal.valueOf(percentage));
-		//student.setUser(user); 
 
-		
 		boolean success = studentService.addStudent(student);
 		if (success) {
-			System.out.println(" Student added successfully!");
+			System.out.println("✅ Student added successfully!");
 		} else {
-			System.out.println(" Failed to add student.");
+			System.out.println("❌ Failed to add student.");
 		}
 	}
+
 	
 	public void displayAllStudents() {
 	    List<Student> students =studentService.getAllStudents();

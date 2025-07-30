@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Student extends User{
 
     private int studentId;
-    //private User user; // Composition: a Student has a User
+  
     private int rollNumber;
     private BigDecimal averagePercentage;
     private int yearOfStudy;

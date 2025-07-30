@@ -21,32 +21,41 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public boolean addStudent(Student student) {
-		//User user = student.getUser();
-		
-		
-		
-		String query = "CALL ems.AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (CallableStatement stmt = conn.prepareCall(query)) {
-			
+	    String query = "CALL ems.AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-			stmt.setString(1, student.getFirstName());
-			stmt.setString(2, student.getLastName());
-			stmt.setLong(3, student.getMobileNumber());
-			stmt.setString(4, student.getEmail());
-			stmt.setString(5, student.getGender().name());
-			stmt.setString(6, student.getCity());
-			stmt.setString(7, student.getRole().name());
-			stmt.setInt(8, student.getRollNumber());
-			stmt.setBigDecimal(9, student.getAveragePercentage());
-			stmt.setInt(10, student.getYearOfStudy());
+	    try (CallableStatement stmt = conn.prepareCall(query)) {
 
-			int rowsAffected = stmt.executeUpdate();
-			return rowsAffected > 0;
-		} catch (SQLException e) {
-			System.out.println("Error adding student: " + e.getMessage());
-			return false;
-		}
+	        // Set parameters in exact order defined in the procedure
+	        stmt.setString(1, student.getFirstName());
+	        stmt.setString(2, student.getLastName());
+	        stmt.setLong(3, student.getMobileNumber());
+	        stmt.setString(4, student.getEmail());
+
+	        // Format ENUMs to match MySQL ENUM values (e.g., "Male" instead of "MALE")
+	        stmt.setString(5, formatEnumValue(student.getGender().name()));
+	        stmt.setString(6, student.getCity());
+	        stmt.setString(7, formatEnumValue(student.getRole().name()));
+	        stmt.setInt(8, student.getRollNumber());
+	        stmt.setBigDecimal(9, student.getAveragePercentage());
+	        stmt.setInt(10, student.getYearOfStudy());
+
+	        // Execute and assume success if no exception thrown
+	        stmt.execute();
+	        return true;
+
+	    } catch (SQLException e) {
+	        System.out.println("❌ Error adding student:");
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
+
+
+	private String formatEnumValue(String enumValue) {
+	    return enumValue.substring(0, 1).toUpperCase() + enumValue.substring(1).toLowerCase();
+	}
+
 
 	
 

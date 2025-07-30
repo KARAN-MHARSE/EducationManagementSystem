@@ -3,5 +3,7 @@ package com.aurionpro.ems.Enum;
 public enum Role {
     STUDENT,
     TEACHER,
-    PRINCIPAL
+    PRINCIPAL,
+	
+	Student,Teacher,Principal
 }

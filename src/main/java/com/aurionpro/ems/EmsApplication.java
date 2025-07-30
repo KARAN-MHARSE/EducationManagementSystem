@@ -15,8 +15,9 @@ public class EmsApplication{
 		Database.getConnection();
 		StudentController controller = new StudentController();
 		FeeController feeController = new FeeController();
-		//controller.addStudent();
-		//controller.displayAllStudents();
+		controller.displayAllStudents();
+		controller.addStudent();
+		
 		//controller.assignCourseToStudent();
 		//controller.viewCourseBYId();
 		//feeController.viewFeeByStudentId();
@@ -26,7 +27,7 @@ public class EmsApplication{
 		//feeController.getTotalEarning();
 		//feeController.getStudentsWithPendingFees();		
 		//feeController.getStudentsWithTotalPaidFees();
-		feeController.start();
+		//feeController.start();
 		
 	}
 }

@@ -23,11 +23,16 @@ public class StudentServiceImpl implements IStudentService {
         int rollNumber = student.getRollNumber();
 
         if (studentDao.isStudentExists(email, rollNumber)) {
-            System.out.println("❌ Student already exists with this email or roll number.");
+            System.out.println(" Student already exists with this email or roll number.");
             return false;
         }
 
-        return studentDao.addStudent(student);
+        try {
+    		return studentDao.addStudent(student);
+    	} catch (Exception e) {
+    		e.printStackTrace(); // Make sure this is there
+    		return false;
+    	}
     }
 
     @Override
