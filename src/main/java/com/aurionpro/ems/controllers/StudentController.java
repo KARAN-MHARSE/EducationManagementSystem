@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.aurionpro.ems.Enum.Gender;
 import com.aurionpro.ems.Enum.Role;
+import com.aurionpro.ems.dto.OperationResult;
 import com.aurionpro.ems.model.Course;
 import com.aurionpro.ems.model.Student;
 import com.aurionpro.ems.model.User;
@@ -52,7 +53,7 @@ public class StudentController {
 			try {
 				mobile = Long.parseLong(scanner.nextLine());
 				if (!DataValidator.isValidMobileNumber(mobile)) {
-					System.out.println(" Invalid mobile number! It should start with 6-9 and be 10 digits.");
+					System.out.println(" Invalid mobile number! It should  be 10 digits.");
 				}
 			} catch (NumberFormatException e) {
 				System.out.println(" Invalid input. Please enter numeric digits only.");
@@ -112,40 +113,72 @@ public class StudentController {
 		student.setYearOfStudy(yearOfStudy);
 		student.setAveragePercentage(BigDecimal.valueOf(percentage));
 
-		boolean success = studentService.addStudent(student);
-		if (success) {
-			System.out.println("✅ Student added successfully!");
-		} else {
-			System.out.println("❌ Failed to add student.");
-		}
+		OperationResult result = studentService.addStudent(student);
+		
+
+		System.out.println(result.getMessage());
+
 	}
 
-	
+//	
+//	public void displayAllStudents() {
+//	    List<Student> students =studentService.getAllStudents();
+//
+//	    if (students.isEmpty()) {
+//	        System.out.println(" No students found.");
+//	        return;
+//	    }
+//
+//	    System.out.println("==== Student List ====");
+//	    for (Student student : students) {
+//	        //User user = student.getUser();
+//	        System.out.println("Student ID     : " + student.getStudentId());
+//	        System.out.println("Name           : " + student.getFirstName() + " " + student.getLastName());
+//	        System.out.println("Email          : " + student.getEmail());
+//	        System.out.println("Mobile         : " + student.getMobileNumber());
+//	        System.out.println("City           : " + student.getCity());
+//	        System.out.println("Gender         : " + student.getGender());
+//	        System.out.println("Roll Number    : " + student.getRollNumber());
+//	        System.out.println("Year of Study  : " + student.getYearOfStudy());
+//	        System.out.println("Percentage     : " + student.getAveragePercentage());
+//	        System.out.println("Created At     : " + student.getCreatedAt());
+//	        System.out.println("First Login?   : " + student.isFirstLogin());
+//	        System.out.println("--------------------------");
+//	    }
+//	}
+//	
 	public void displayAllStudents() {
-	    List<Student> students =studentService.getAllStudents();
+	    List<Student> students = studentService.getAllStudents();
 
 	    if (students.isEmpty()) {
-	        System.out.println(" No students found.");
+	        System.out.println("No students found.");
 	        return;
 	    }
 
-	    System.out.println("==== Student List ====");
+	    System.out.println("===============================================================================================");
+	    System.out.printf("%-5s %-15s %-25s %-15s %-10s %-6s %-10s %-5s %-10s %-12s %-10s%n",
+	            "ID", "Name", "Email", "Mobile", "City", "Gender", "Roll No", "Year", "Percentage", "Created At", "FirstLogin");
+	    System.out.println("===============================================================================================");
+
 	    for (Student student : students) {
-	        //User user = student.getUser();
-	        System.out.println("Student ID     : " + student.getStudentId());
-	        System.out.println("Name           : " + student.getFirstName() + " " + student.getLastName());
-	        System.out.println("Email          : " + student.getEmail());
-	        System.out.println("Mobile         : " + student.getMobileNumber());
-	        System.out.println("City           : " + student.getCity());
-	        System.out.println("Gender         : " + student.getGender());
-	        System.out.println("Roll Number    : " + student.getRollNumber());
-	        System.out.println("Year of Study  : " + student.getYearOfStudy());
-	        System.out.println("Percentage     : " + student.getAveragePercentage());
-	        System.out.println("Created At     : " + student.getCreatedAt());
-	        System.out.println("First Login?   : " + student.isFirstLogin());
-	        System.out.println("--------------------------");
+	        String name = student.getFirstName() + " " + student.getLastName();
+	        System.out.printf("%-5d %-15s %-25s %-15s %-10s %-6s %-10d %-5d %-10.2f %-12s %-10s%n",
+	                student.getStudentId(),
+	                name,
+	                student.getEmail(),
+	                student.getMobileNumber(),
+	                student.getCity(),
+	                student.getGender(),
+	                student.getRollNumber(),
+	                student.getYearOfStudy(),
+	                student.getAveragePercentage(),
+	                student.getCreatedAt(),
+	                student.isFirstLogin());
 	    }
+
+	    System.out.println("===============================================================================================");
 	}
+
 	
 	public void assignCourseToStudent() {
 	    System.out.println("\n=========== Assign Course to Student ===========");
@@ -158,7 +191,7 @@ public class StudentController {
 	    if (isAssigned) {
 	        System.out.println("Course assigned successfully to student.");
 	    } else {
-	        System.out.println(" Failed to assign course. Please check if Student ID and Course ID are valid.");
+	        System.out.println(" Failed to assign course.Please check if Student ID and Course ID are valid.");
 	    }
 	}
 

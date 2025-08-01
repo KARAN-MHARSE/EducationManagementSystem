@@ -115,7 +115,8 @@ public class DataValidator {
 
 	        
 	        try {
-	        	student.setCreatedAt(rs.getTimestamp("created_at"));
+	        	student.setCreatedAt(rs.getDate("created_at"));
+
 	        	student.setFirstLogin(rs.getBoolean("is_first_login")); 
 	        } catch (SQLException e) {
 	           

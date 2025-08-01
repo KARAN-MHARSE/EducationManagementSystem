@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.aurionpro.ems.database.Database;
+import com.aurionpro.ems.dto.OperationResult;
 import com.aurionpro.ems.model.*;
 import com.aurionpro.ems.utils.DataValidator;
 import com.aurionpro.ems.Enum.Gender;
@@ -20,18 +21,15 @@ public class StudentDaoImpl implements IStudentDao {
 	}
 
 	@Override
-	public boolean addStudent(Student student) {
-	    String query = "CALL ems.AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public OperationResult addStudent(Student student) {
+	    String query = "CALL ems.AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	    try (CallableStatement stmt = conn.prepareCall(query)) {
 
-	        // Set parameters in exact order defined in the procedure
 	        stmt.setString(1, student.getFirstName());
 	        stmt.setString(2, student.getLastName());
 	        stmt.setLong(3, student.getMobileNumber());
-	        stmt.setString(4, student.getEmail());
-
-	        // Format ENUMs to match MySQL ENUM values (e.g., "Male" instead of "MALE")
+	        stmt.setString(4, student.getEmail());	        
 	        stmt.setString(5, formatEnumValue(student.getGender().name()));
 	        stmt.setString(6, student.getCity());
 	        stmt.setString(7, formatEnumValue(student.getRole().name()));
@@ -39,16 +37,21 @@ public class StudentDaoImpl implements IStudentDao {
 	        stmt.setBigDecimal(9, student.getAveragePercentage());
 	        stmt.setInt(10, student.getYearOfStudy());
 
-	        // Execute and assume success if no exception thrown
+	        // Register OUT parameter
+	        stmt.registerOutParameter(11, Types.VARCHAR);
+
 	        stmt.execute();
-	        return true;
+
+	        String resultMessage = stmt.getString(11);
+
+	        boolean success = "SUCCESS".equalsIgnoreCase(resultMessage);
+	        return new OperationResult(success, resultMessage);
 
 	    } catch (SQLException e) {
-	        System.out.println("❌ Error adding student:");
-	        e.printStackTrace();
-	        return false;
+	        return new OperationResult(false, "Database error: " + e.getMessage());
 	    }
 	}
+
 
 
 
@@ -61,7 +64,7 @@ public class StudentDaoImpl implements IStudentDao {
 
 	public boolean isStudentExists(String email, int rollNumber) {
 
-		String sql = "select count(*) from ems.user u join ems.student s on u.user_id= s.user_id where email =? or roll_number=?";
+		String sql = "select count(*) from ems.user u join ems.student s on u.user_id= s.user_id where email =? or roll_number=? and isActive=1";
 		try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
 			preparedStatement.setString(1, email);
@@ -85,7 +88,7 @@ public class StudentDaoImpl implements IStudentDao {
 	@Override
 	public List<Student> getAllStudents() {
 		
-		 String query = "SELECT u.*, s.* FROM ems.user u JOIN ems.student s ON u.user_id = s.user_id";
+		 String query = "SELECT u.*, s.* FROM ems.user u JOIN ems.student s ON u.user_id = s.user_id where isActive =1 ";
 		 List<Student> students = new ArrayList();
 		 
 		 try(PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -105,44 +108,73 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public boolean assignCourse(int studentId, int courseId) {
-	    String checkSql = "select count(*) from ems.student_course where student_id = ? and  course_id = ?";
+
+	  
+	    if (!checkIsActive(studentId)) {
+	        System.out.println(" Student not found or may be inactive.");
+	        return false;
+	    }
+
 	    String insertSql = "insert into ems.student_course (student_id, course_id) values (?, ?)";
 
-	    try (
-	        PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-	        PreparedStatement insertStmt = conn.prepareStatement(insertSql)
-	    ) {
-	        checkStmt.setInt(1, studentId);
-	        checkStmt.setInt(2, courseId);
-	        ResultSet rs = checkStmt.executeQuery();
-
-	        if (rs.next() && rs.getInt(1) > 0) {
-	            System.out.println(" Course is already assigned to the student.");
-	            return false;
-	        }
-
+	    try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
 	        insertStmt.setInt(1, studentId);
 	        insertStmt.setInt(2, courseId);
-	        return insertStmt.executeUpdate() > 0;
+	        insertStmt.executeUpdate();
+
+	       // System.out.println("Course assigned successfully.");
+	        return true;
+
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        
+	        System.out.println("Course is already assigned to the student.");
+	        return false;
 
 	    } catch (SQLException e) {
-	        System.out.println("Error assigning course: " );
+	        System.out.println(" Error assigning course: " + e.getMessage());
 	        return false;
 	    }
 	}
 
-	
+
+	public boolean checkIsActive(int studentId) {
+		String sql ="Select isActive as status from ems.user u join ems.student s on u.user_id=s.user_id where s.student_id = ?";
+
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, studentId);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getBoolean("status");
+	            } else {
+	                System.out.println("No student found with ID: " + studentId);
+	                return false; 
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        System.out.println(" Error checking isActive: " + e.getMessage());
+	        return false;
+	    }
+	}
+
 	
 
 
 	@Override
 	public List<Course> viewCoursesByStudentId(int studentId) {
 	    List<Course> courses = new ArrayList<>();
+	    
+
+	    if (!checkIsActive(studentId)) {
+	        System.out.println(" Student not found or may be inactive.");
+	        return courses; 
+	    }
 
 	    String sql = "select c.course_id, c.name, c.description, c.course_duration, c.created_at " +
 	                 "from ems.student_course sc " +
 	                 "join ems.course c ON sc.course_id = c.course_id " +
-	                 "where sc.student_id = ?";
+	                 "where sc.student_id = ? ";
 
 	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 	        stmt.setInt(1, studentId);

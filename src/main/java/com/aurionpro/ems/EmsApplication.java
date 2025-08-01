@@ -15,11 +15,11 @@ public class EmsApplication{
 		Database.getConnection();
 		StudentController controller = new StudentController();
 		FeeController feeController = new FeeController();
-		controller.displayAllStudents();
-		controller.addStudent();
+		//controller.displayAllStudents();
+		//controller.addStudent();
 		
 		//controller.assignCourseToStudent();
-		//controller.viewCourseBYId();
+		controller.viewCourseBYId();
 		//feeController.viewFeeByStudentId();
 		//feeController.viewCourseFeeById();
 		//feeController.updateFeeById();
