@@ -33,10 +33,7 @@ public class EmsApplication {
 		
 //		AuthenticationController authenticationController = new AuthenticationController(new AuthenticationService());
 //		authenticationController.showAuthenticationMenu(scanner);
-		
-		
-		AdminController adminController = new AdminController(new StudentService(new StudentDaoImpl()), new TeacherService());
-		adminController.printCourseManagementMenu(scanner);
-	
+
+		AdminController controller = new AdminController(new StudentService(new StudentDaoImpl()), new TeacherService());
 	}
 }

@@ -10,6 +10,7 @@ public class Course {
 	private String name;
 	private String description;
 	private int courseYear;
+	private double courseFee;
 	private Timestamp createdAt;
 	private boolean isDeleted;
 
@@ -20,6 +21,17 @@ public class Course {
 		this.createdAt = createdAt;
 		this.isDeleted = isDeleted;
 	}
+
+	
+	public double getCourseFee() {
+		return courseFee;
+	}
+
+
+	public void setCourseFee(double courseFee) {
+		this.courseFee = courseFee;
+	}
+
 
 	public boolean isDeleted() {
 		return isDeleted;

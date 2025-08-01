@@ -1,5 +1,6 @@
 package com.aurionpro.ems.utils;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,33 @@ public class DataValidationUtil {
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
 	}
+	
+	public static int checkFormatInt(Scanner scanner, String message) {
+		while (true) {
+			System.out.println(message);
+			String input = scanner.nextLine();
+
+			try {
+				return Integer.parseInt(input);
+			} catch (NumberFormatException exception) {
+				System.out.println("only integer ");
+			}
+		}
+	}
+
+	public static double checkFormatDouble(Scanner scanner, String message) {
+		while (true) {
+			System.out.println(message);
+			String input = scanner.nextLine();
+
+			try {
+				return Double.parseDouble(input);
+			} catch (NumberFormatException exception) {
+				System.out.println("only double allowed ");
+			}
+		}
+	}
+
 
 
 }

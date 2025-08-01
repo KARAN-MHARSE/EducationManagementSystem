@@ -12,19 +12,20 @@ public class Admin extends User {
 	
 	
 	
-
-
+	
 	public Admin(int userId, String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Date createdAt, boolean isFirstLogin) {
-		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
-		this.experience=6;
+			String city, Role role, Date createdAt, boolean isFirstLogin, boolean isActive, int adminId) {
+		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, isActive);
+		this.adminId = adminId;
+		this.experience = 6;
 	}
 	public Admin(int userId, String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Date createdAt, boolean isFirstLogin, int experience) {
-		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
+			String city, Role role, Date createdAt, boolean isFirstLogin, boolean isActive, int adminId,
+			int experience) {
+		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, isActive);
+		this.adminId = adminId;
 		this.experience = experience;
 	}
-	
 	public int getAdminId() {
 		return adminId;
 	}

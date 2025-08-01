@@ -174,7 +174,7 @@ public class CourseDaoImplementation implements ICourseDao {
 	}
 
 	public List<Subject> getSubjectsInCourse(int courseId) {
-		String query = "SELECT s.subject_id, s.name FROM ems.subject s JOIN ems.course c ON s.course_id = c.course_id WHERE s.course_id = ?";
+		String query = "SELECT s.subject_id, s.name FROM ems.subject s JOIN ems.course c ON s.course_id = c.course_id WHERE s.course_id = ? and c.is_deleted = false;";
 		List<Subject> subjectList = new ArrayList<>();
 
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {

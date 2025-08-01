@@ -13,13 +13,25 @@ public class Teacher extends User {
 	private String qualification;
 	private int experience;
 
+	
+
 	public Teacher(int userId, String firstName, String lastName, long mobileNumber, String email, Gender gender,
-			String city, Role role, Date createdAt, boolean isFirstLogin, int subjectId,
-			String qualification, int experience) {
-		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
+			String city, Role role, Date createdAt, boolean isFirstLogin, boolean isActive, int teacherId,
+			int subjectId, String qualification, int experience) {
+		super(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, isActive);
+		this.teacherId = teacherId;
 		this.subjectId = subjectId;
 		this.qualification = qualification;
 		this.experience = experience;
+	}
+
+	public Teacher() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Teacher(String firstName, String lastName, long mobileNumber, String email, Gender gender, String city,
+			Role role, java.util.Date createdAt, boolean b, String qualification2, int experience2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getTeacherId() {

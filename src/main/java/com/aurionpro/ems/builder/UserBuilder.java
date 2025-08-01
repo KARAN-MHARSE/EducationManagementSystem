@@ -152,13 +152,13 @@ public class UserBuilder {
 	}
 
 	public Teacher getTeacher() {
-		Teacher teacher = new Teacher(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, subjectId, qualification, experience);
+		Teacher teacher = new Teacher(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, isActive, subjectId, adminId, qualification, experience);
 		teacher.setTeacherId(teacherId);
 		return teacher;
 	}
 
 	public Admin getAdmin() {
-		Admin admin =  new Admin(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin);
+		Admin admin =  new Admin(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, isActive, adminId);
 		admin.setAdminId(adminId);
 		return admin;
 	}
