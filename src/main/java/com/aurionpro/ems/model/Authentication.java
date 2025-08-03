@@ -1,58 +1,44 @@
 package com.aurionpro.ems.model;
 
 public class Authentication {
-    private int authId;
-    private String username;
-    private String password;
-    private int userId;
+	private int authenticationID;
+	private String userName;
+	private String password;
+	private int userId;
 
-    
-    public Authentication() {
-    	
-    }
+	public Authentication(String userName, String password, int userId) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.userId = userId;
+	}
 
-    public Authentication(String username, String password, int userId) {
-        this.username = username;
-        this.password = password;
-        this.userId = userId;
-    }
+	public int getAuthenticationID() {
+		return authenticationID;
+	}
 
-    // Getters and Setters
-    public int getAuthId() {
-        return authId;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setAuthId(int authId) {
-        this.authId = authId;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public int getUserId() {
+		return userId;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    
-    @Override
-    public String toString() {
-        return "Authentication [authId=" + authId + ", username=" + username + ", userId=" + userId + "]";
-    }
 }

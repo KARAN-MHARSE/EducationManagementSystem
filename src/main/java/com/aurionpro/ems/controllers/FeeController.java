@@ -21,7 +21,7 @@ public class FeeController {
 	
 	public void start() {
 		while (true) {
-			System.out.println("\n📚📊 Fee Management Menu");
+			System.out.println("\nFee Management Menu");
 			System.out.println("1. View Total Paid Fees (All Students)");
 			System.out.println("2. View Total Pending Fees (All Students)");
 			System.out.println("3. View Fees By Student ID");
@@ -52,10 +52,10 @@ public class FeeController {
 					getTotalEarning();
 					break;
 				case 7:
-					System.out.println("👋 Exiting Fee Management. Thank you!");
+					System.out.println(" Exiting Fee Management. Thank you!");
 					return;
 				default:
-					System.out.println("❌ Invalid choice. Please try again.");
+					System.out.println(" Invalid choice. Please try again.");
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class FeeController {
 	        return;
 	    }
 
-	    System.out.println("📋 Students with Pending Fees:\n");
+	    System.out.println("Students with Pending Fees:\n");
 
 
 	    System.out.printf("%-10s %-25s %-30s %-15s %-10s\n",
@@ -144,7 +144,7 @@ public class FeeController {
 	        return;
 	    }
 
-	    System.out.println("📋 Students with Pending Fees:\n");
+	    System.out.println("Students with Pending Fees:\n");
 
 
 	    System.out.printf("%-10s %-25s %-30s %-15s %-10s\n",
