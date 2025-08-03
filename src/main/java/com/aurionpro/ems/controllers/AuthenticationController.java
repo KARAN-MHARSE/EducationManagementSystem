@@ -27,6 +27,7 @@ public class AuthenticationController {
 					break;
 
 				default:
+					authenticationService.changePassword(scanner);
 					break;
 				}
 
