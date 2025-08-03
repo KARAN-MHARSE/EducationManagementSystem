@@ -66,4 +66,12 @@ public class Teacher extends User {
 		this.experience = experience;
 	}
 
+	@Override
+	public String toString() {
+		return "Teacher [teacherId=" + teacherId + ", subjectId=" + subjectId + ", qualification=" + qualification
+				+ ", experience=" + experience + "]";
+	}
+	
+	
+
 }

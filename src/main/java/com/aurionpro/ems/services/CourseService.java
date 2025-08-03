@@ -2,6 +2,7 @@ package com.aurionpro.ems.services;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,6 +13,7 @@ import com.aurionpro.ems.exceptions.DataValidationException;
 import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Subject;
 import com.aurionpro.ems.utils.DataValidationUtil;
+import com.aurionpro.ems.utils.PrintDataInFormat;
 
 public class CourseService {
 	private ICourseDao courseDao;
@@ -113,8 +115,10 @@ public class CourseService {
 		if(courseId < 0) throw new DataValidationException("Enter  valid course id");
 		
 		Course course = courseDao.getCourseById(courseId);
+		List<Course> courses = Arrays.asList(course);
 		
-		System.out.println(course);
+		PrintDataInFormat.printCourses(courses);
+
 		
 	}
 

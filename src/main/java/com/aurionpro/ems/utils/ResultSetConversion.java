@@ -48,6 +48,7 @@ public class ResultSetConversion {
 			Course course = new Course();
 			course.setCourseId(resultSet.getInt("course_id"));
 			course.setName(resultSet.getString("name"));
+			course.setDescription(resultSet.getString("description"));
 		
 			courses.add(course);
 	}

@@ -7,8 +7,12 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.aurionpro.ems.controllers.AdminController;
+import com.aurionpro.ems.controllers.CourseController;
+import com.aurionpro.ems.controllers.DashboardController;
+import com.aurionpro.ems.controllers.FeesController;
 import com.aurionpro.ems.controllers.StudentController;
 import com.aurionpro.ems.controllers.TeacherController;
+import com.aurionpro.ems.dao.implementation.CourseDaoImplementation;
 import com.aurionpro.ems.dao.implementation.StudentDaoImpl;
 import com.aurionpro.ems.database.Database;
 import com.aurionpro.ems.enums.Role;
@@ -22,10 +26,15 @@ public class AuthenticationService {
 	private TeacherController teacherController;
 	
 	public AuthenticationService() {
-		StudentService studentService = new StudentService(new StudentDaoImpl());
-		TeacherService teacherService = new TeacherService();
 		
-		adminController = new AdminController(studentService,teacherService);
+
+		StudentController studentController = new StudentController(new StudentService(new StudentDaoImpl()));
+		TeacherController teacherController = new TeacherController(new TeacherService());
+		CourseController courseController = new CourseController(new CourseService(new CourseDaoImplementation()));
+		FeesController feesController = new FeesController(new FeesServices());
+		DashboardController dashboardController = new DashboardController(new DashboardService());
+		
+		adminController = new AdminController(studentController, teacherController, courseController, feesController,dashboardController);
 	}
 
 	public  void login(Scanner scanner) throws SQLException {
@@ -55,12 +64,12 @@ public class AuthenticationService {
 		
 		Role role = Role.valueOf(resultSet.getString("role"));
 		switch (role) {
-		case Student:
-			StudentController.showMenu(scanner);
-			break;
-		case Teacher:
-			TeacherController.showMenu(scanner);
-			break;
+//		case Student:
+//			StudentController.showMenu(scanner);
+//			break;
+//		case Teacher:
+//			TeacherController.showMenu(scanner);
+//			break;
 		case Admin:
 			adminController.showMenu(scanner);
 			break;

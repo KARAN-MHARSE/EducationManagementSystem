@@ -15,6 +15,7 @@ import com.aurionpro.ems.database.Database;
 import com.aurionpro.ems.exceptions.CourseNotFoundException;
 import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Subject;
+import com.aurionpro.ems.utils.PrintDataInFormat;
 import com.aurionpro.ems.utils.ResultSetConversion;
 
 public class CourseDaoImplementation implements ICourseDao {
@@ -93,16 +94,9 @@ public class CourseDaoImplementation implements ICourseDao {
 	public void printAllCourseDetails() {
 		List<Course> courses = getAllCourses();
 
-		System.out.println("======================================");
-		System.out.println("           Course Details");
-		System.out.println("======================================");
-		System.out.printf("%-15s%-30s%n", "Course ID", "Course Name");
-		System.out.println("--------------------------------------");
-
-		for (Course course : courses)
-			if (!course.isDeleted()) {
-				System.out.printf("| %-10d | %-20s |\n", course.getCourseId(), course.getName());
-			}
+		if(courses == null || courses.isEmpty()) throw new CourseNotFoundException();
+		
+		PrintDataInFormat.printCourses(courses);
 	}
 
 	public boolean addSubjectToCourse(String subjectName, int courseId) {

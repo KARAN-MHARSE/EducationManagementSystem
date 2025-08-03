@@ -24,7 +24,6 @@ class StudentDaoTest {
 
 	@Test
 	void testGetStudentByEmail() {
-		assert
 	}
 
 	@Test

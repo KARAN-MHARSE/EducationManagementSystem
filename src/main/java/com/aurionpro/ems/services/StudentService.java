@@ -16,6 +16,7 @@ import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Student;
 import com.aurionpro.ems.models.User;
 import com.aurionpro.ems.utils.DataValidationUtil;
+import com.aurionpro.ems.utils.PrintDataInFormat;
 import com.aurionpro.ems.utils.UserUtil;
 
 public class StudentService {
@@ -32,12 +33,7 @@ public class StudentService {
 		if (students.isEmpty())
 			throw new StudentNotFoundException();
 
-		for (Student student : students) {
-			if (student.getIsActive()) {
-				System.out.println(student);
-
-			}
-		}
+		PrintDataInFormat.printStudents(students);
 
 	}
 
@@ -201,7 +197,7 @@ public class StudentService {
 	private void printStudentIfExists(Student student) {
 		if (student != null) {
 			System.out.println("\nStudent Found:");
-			System.out.println(student);
+			PrintDataInFormat.printStudent(student);
 		} else {
 			System.out.println("No student found with the given detail.");
 		}

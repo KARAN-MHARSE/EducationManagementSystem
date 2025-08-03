@@ -18,6 +18,7 @@ import com.aurionpro.ems.models.Subject;
 import com.aurionpro.ems.models.Teacher;
 import com.aurionpro.ems.models.Teacher_Subject;
 import com.aurionpro.ems.utils.DataValidationUtil;
+import com.aurionpro.ems.utils.PrintDataInFormat;
 
 public class TeacherService {
 
@@ -94,17 +95,9 @@ public class TeacherService {
 			System.out.println("No teachers present in the system");
 			return;
 		}
-		System.out.println("======================================");
-		System.out.println("         Teacher Details");
-		System.out.println("======================================");
-		System.out.printf("%-15s%-30s%n", "Teacher ID", "Full Name");
-		System.out.println("--------------------------------------");
-
-		for (Teacher teacherDetail : teacherDetails) {
-			System.out.printf("%-15d%-30s%n", teacherDetail.getTeacherId(),
-					teacherDetail.getFirstName() + " " + teacherDetail.getLastName());
-		}
-		System.out.println("======================================");
+		
+			PrintDataInFormat.printTeachers(teacherDetails);
+		
 	}
 
 	public void assignSubject(Scanner scanner) {
@@ -184,15 +177,7 @@ public class TeacherService {
 		if (detail == null)
 			throw new TeacherNotFoundException();
 
-		System.out.println("======================================");
-		System.out.println("         Teacher Details");
-		System.out.println("======================================");
-		System.out.printf("%-20s: %d%n", "Teacher ID", detail.getTeacherId());
-		System.out.printf("%-20s: %s%n", "Full Name", detail.getFirstName() + " " + detail.getLastName());
-		System.out.printf("%-20s: %s%n", "Email", detail.getEmail());
-		System.out.printf("%-20s: %s%n", "Qualification", detail.getQualification());
-		System.out.printf("%-20s: %d years%n", "Experience", detail.getExperience());
-		System.out.println("======================================");
+		PrintDataInFormat.printSingleTeacher(detail);
 	}
 
 	public void DeleteATeacher(Scanner scanner) {
@@ -270,21 +255,11 @@ public class TeacherService {
 
 	private boolean printAllTeachers() {
 		List<Teacher> teacherDetails = new ArrayList<>();
-		teacherDetails = teacherDao.getAllTeachers();
-		if (teacherDetails.isEmpty()) {
-			System.out.println("No teachers present in the system");
-			return false;
+		if(teacherDetails.isEmpty()) return false;
+		
+		for(Teacher t : teacherDetails) {
+			PrintDataInFormat.printSingleTeacher(t);
 		}
-		System.out.println("======================================");
-		System.out.println("         Teacher Details");
-		System.out.println("======================================");
-		System.out.printf("%-15s%-30s%n", "Teacher ID", "Full Name");
-		System.out.println("--------------------------------------");
-
-		for (Teacher teacherDetail : teacherDetails) {
-			System.out.printf("%-15d%-30s%n", teacherDetail.getTeacherId(), teacherDetail.getFirstName()+" "+teacherDetail.getLastName());
-		}
-		System.out.println("======================================");
 		return true;
 	}
 

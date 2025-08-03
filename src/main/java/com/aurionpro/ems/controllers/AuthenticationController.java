@@ -24,7 +24,6 @@ public class AuthenticationController {
 				switch (choice) {
 				case 1:
 					authenticationService.login(scanner);
-
 					break;
 
 				default:
@@ -32,10 +31,11 @@ public class AuthenticationController {
 				}
 
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 				System.err.println(e.getMessage());
+				scanner.nextLine();
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 				System.err.println(e.getMessage());
 			}
 		}

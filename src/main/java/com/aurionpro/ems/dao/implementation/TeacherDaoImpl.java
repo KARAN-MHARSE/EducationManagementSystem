@@ -88,7 +88,7 @@ public  class TeacherDaoImpl implements ITeacherDao{
 
 	public List<Teacher> getAllTeacherDetails() {
 		List<Teacher> teacherDetails = new ArrayList<Teacher>();
-		String query = "SELECT t.teacher_id, u.first_name, u.last_name " + "FROM ems.teacher t "
+		String query = "SELECT * FROM ems.teacher t "
 				+ "JOIN ems.user u ON t.user_id = u.user_id where u.isActive=true";
 
 		try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
@@ -99,7 +99,12 @@ public  class TeacherDaoImpl implements ITeacherDao{
 
 				teacher.setFirstName(rs.getString("first_name"));
 				teacher.setLastName(rs.getString("last_name"));
+				teacher.setEmail(rs.getString("email"));
+				teacher.setMobileNumber(rs.getLong("mobile_number"));
+				teacher.setQualification(rs.getString("qualification"));
+				teacher.setExperience(rs.getInt("experience"));
 				teacher.setTeacherId(teacherId);
+				teacher.setActive(rs.getBoolean("isActive"));
 
 				teacherDetails.add(teacher);
 			}
