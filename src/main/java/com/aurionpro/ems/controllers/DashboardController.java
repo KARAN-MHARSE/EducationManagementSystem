@@ -27,6 +27,12 @@ public class DashboardController {
 		System.out.println(
 				"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
+//		System.out.printf("%-5s %-10s %-20s %-30s %-30s %-30s %-10s %-10s%n", "SrNo", "StudID", "Student Name",
+//				"Subjects", "Teachers", "Total", "Paid", "Pending");
+//
+//		System.out.println(
+//				"------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
 		for (Dashboard d : dashboards) {
 
 			String[] courses = splitLines(d.getCourses());
@@ -52,6 +58,19 @@ public class DashboardController {
 							safeGet(courses, i), safeGet(subjects, i), safeGet(teachers, i), "", "", "");
 				}
 			}
+//			for (int i = 0; i < maxLines; i++) {
+//				if (i == 0) {
+//					System.out.printf("%-5d %-10d %-20s %-30s %-30s %-30s %10.2f %10.2f %10.2f%n", d.getSrNo(),
+//							d.getStudentId(), d.getStudentName(), safeGet(subjects, i), safeGet(teachers, i), "", // Placeholder
+//																													// if
+//																													// needed
+//							d.getTotalFee(), d.getTotalPaid(), d.getPendingFee());
+//				} else {
+//					System.out.printf("%-5s %-10s %-20s %-30s %-30s %-30s %10s %10s %10s%n", "", "", "",
+//							safeGet(subjects, i), safeGet(teachers, i), "", "", "", "");
+//				}
+//			}
+
 			System.out.println(
 					"------------------------------------------------------------------------------------------------------------------------------------------------------");
 		}

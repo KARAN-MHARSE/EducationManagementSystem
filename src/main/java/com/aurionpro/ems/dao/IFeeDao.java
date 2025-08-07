@@ -17,6 +17,7 @@ public interface IFeeDao {
 	double getTotalEarnings();
 	List<PendingFeeStudentDto> getStudentsWithPendingFees();
 	List<PendingFeeStudentDto> getStudentsWithTotalPaidFees();
+	List<Course> getFeesByCourse();
 	
 	
 }

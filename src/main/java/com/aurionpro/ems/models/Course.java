@@ -9,17 +9,18 @@ public class Course {
 	private int courseId;
 	private String name;
 	private String description;
-	private int courseYear;
+	private int courseDuration;
 	private double courseFee;
 	private Timestamp createdAt;
 	private boolean isDeleted;
 
-	public Course(String name, String description, int courseYear, Timestamp createdAt, Boolean isDeleted) {
+	public Course(String name, String description, int courseDuration, Timestamp createdAt, Boolean isDeleted,double courseFee) {
 		this.name = name;
 		this.description = description;
-		this.courseYear = courseYear;
+		this.courseDuration = courseDuration;
 		this.createdAt = createdAt;
 		this.isDeleted = isDeleted;
+		this.courseFee = courseFee;
 	}
 
 	
@@ -65,12 +66,12 @@ public class Course {
 		this.description = description;
 	}
 
-	public int getCourseYear() {
-		return courseYear;
+	public int getcourseDuration() {
+		return courseDuration;
 	}
 
-	public void setCourseYear(int courseYear) {
-		this.courseYear = courseYear;
+	public void setcourseDuration(int courseDuration) {
+		this.courseDuration = courseDuration;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -88,7 +89,7 @@ public class Course {
 	@Override
 	public String toString() {
 		return "Course [courseId=" + courseId + ", name=" + name + ", description=" + description + ", courseYear="
-				+ courseYear + ", createdAt=" + createdAt + ", isDeleted=" + isDeleted + "]";
+				+ courseDuration + ", createdAt=" + createdAt + ", isDeleted=" + isDeleted + "]";
 	}
 
 }

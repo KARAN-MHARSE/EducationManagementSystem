@@ -11,6 +11,7 @@ import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
 import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Student;
+import com.aurionpro.ems.models.Teacher;
 import com.google.protobuf.Timestamp;
 
 public class ResultSetConversion {
@@ -49,11 +50,46 @@ public class ResultSetConversion {
 			course.setCourseId(resultSet.getInt("course_id"));
 			course.setName(resultSet.getString("name"));
 			course.setDescription(resultSet.getString("description"));
+			course.setcourseDuration(resultSet.getInt("course_duration"));
+			course.setCourseFee(resultSet.getDouble("course_fee"));
 		
 			courses.add(course);
 	}
 		return courses;
 	}
+	
+	public static List<Teacher> convertResultSetToTeacherList(ResultSet resultSet) throws SQLException {
+	    List<Teacher> teachers = new ArrayList<>();
+
+	    while (resultSet.next()) {
+	        Teacher teacher = null;
+
+	       
+	        UserBuilder teacherBuilder = new UserBuilder();
+	        teacher = teacherBuilder
+	                .setUserId(resultSet.getInt("user_id"))
+	                .setFirstName(resultSet.getString("first_name"))
+	                .setLastName(resultSet.getString("last_name"))
+	                .setMobileNumber(resultSet.getLong("mobile_number"))
+	                .setEmail(resultSet.getString("email"))
+	                .setGender(Gender.valueOf(resultSet.getString("gender").toUpperCase())) // case-insensitive
+	                .setCity(resultSet.getString("city"))
+	                .setRole(Role.valueOf(resultSet.getString("role").toUpperCase()))
+	                .setFirstLogin(resultSet.getBoolean("is_first_login"))
+	                .setActive(resultSet.getBoolean("isActive"))
+
+	                .setTeacherId(resultSet.getInt("teacher_id"))
+	                .setQualification(resultSet.getString("qualification"))
+	                .setExperience(resultSet.getInt("experience"))
+
+	                .getTeacher();
+
+	        teachers.add(teacher);
+	    }
+
+	    return teachers;
+	}
+
 
 	
 }

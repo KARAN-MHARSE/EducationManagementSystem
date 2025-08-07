@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.crypto.Data;
+
 import com.aurionpro.ems.builder.UserBuilder;
 import com.aurionpro.ems.dao.ICourseDao;
 import com.aurionpro.ems.dao.IStudentDao;
@@ -130,9 +132,7 @@ public class StudentService {
 	public void deleteStudent(Scanner scanner) throws SQLException {
 		printAllStudents();
 
-		System.out.println("Enter the student id to delete");
-		int studentId = scanner.nextInt();
-		scanner.nextLine();
+		int studentId = DataValidationUtil.checkFormatInt(scanner, "Enter the student id to delete");
 
 		boolean isDeleted = UserUtil.deleteUserById(studentId);
 		if (!isDeleted) {
@@ -149,39 +149,53 @@ public class StudentService {
 			System.out.println("3. Search by Mobile Number");
 			System.out.println("4. Search by Email");
 			System.out.println("5. Exit");
-			System.out.print("Choose an option: ");
 
-			int choice = scanner.nextInt();
-			scanner.nextLine(); // consume newline
+			int choice = DataValidationUtil.checkFormatInt(scanner, "Choose an option:");
 
 			switch (choice) {
 			case 1: {
-				System.out.print("Enter Student ID: ");
-				int id = scanner.nextInt();
-				scanner.nextLine();
+				int id = DataValidationUtil.checkFormatInt(scanner, "Enter Student ID:");
 				Student studentById = studentDao.getStudentByID(id);
 				printStudentIfExists(studentById);
 				break;
 			}
 			case 2: {
-				System.out.print("Enter Roll Number: ");
-				int roll = scanner.nextInt();
-				scanner.nextLine();
+				int roll = DataValidationUtil.checkFormatInt(scanner, "Enter Roll Number:");
 				Student studentByRoll = studentDao.getStudentByRollNumber(roll);
 				printStudentIfExists(studentByRoll);
 				break;
 			}
 			case 3: {
-				System.out.print("Enter Mobile Number: ");
-				long mobile = scanner.nextLong();
-				scanner.nextLine();
+				long mobile;
+				while (true) {
+					System.out.print("Enter Mobile Number: ");
+					String mobileInput = scanner.nextLine();
+					try {
+						mobile = Long.parseLong(mobileInput);
+						if (DataValidationUtil.isValidMobileNumber(mobile)) {
+							break;
+						} else {
+							System.out.println("Invalid mobile number. Must be 10 digits and start with 6-9.");
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("Invalid format. Please enter a valid 10-digit mobile number.");
+					}
+				}
 				Student studentByMobile = studentDao.getStudentByMobileNumber(mobile);
 				printStudentIfExists(studentByMobile);
 				break;
 			}
 			case 4: {
-				System.out.print("Enter Email: ");
-				String email = scanner.nextLine();
+				String email;
+				while (true) {
+					System.out.print("Enter Email: ");
+					email = scanner.nextLine();
+					if (DataValidationUtil.isValidEmail(email)) {
+						break;
+					} else {
+						System.out.println("Invalid email format.");
+					}
+				}
 				Student studentByEmail = studentDao.getStudentByEmail(email);
 				printStudentIfExists(studentByEmail);
 				break;
@@ -221,24 +235,73 @@ public class StudentService {
 		}
 	}
 
-	public void viewCourseBYId(Scanner scanner) {
+	public int viewCourseOfStudentBYId(Scanner scanner) {
+		try {
+			printAllStudents();
+		} catch (SQLException e) {
+			System.out.println("unable to display ...try after sometime");
+			e.printStackTrace();
+		}
+		
 		int studentId = DataValidationUtil.checkFormatInt(scanner, "Enter Student ID: ");
 		List<Course> courses = studentDao.viewCoursesByStudentId(studentId);
 
 		if (courses == null || courses.isEmpty()) {
 			System.out.println(" No courses found for this student.");
-			return;
+			return 0;
 		}
 
+//		System.out.println("\n=========== Courses for Student ID: " + studentId + " ===========");
+//		for (Course course : courses) {
+//			System.out.println("Course ID     : " + course.getCourseId());
+//			System.out.println("Course Name   : " + course.getName());
+//			System.out.println("Description   : " + course.getDescription());
+//			System.out.println("Course Year   : " + course.getCourseYear());
+//			System.out.println("Created At    : " + course.getCreatedAt());
+//			System.out.println("-----------------------------");
+//		}
 		System.out.println("\n=========== Courses for Student ID: " + studentId + " ===========");
+
+		// Print table header
+		System.out.println(
+				"|------------|---------------------------|----------------------------------------------------|-----------------|");
+		System.out.printf("| %-10s | %-25s | %-50s | %-15s |%n", "Course ID", "Course Name", "Description",
+				"Course Duration");
+		System.out.println(
+				"|------------|---------------------------|----------------------------------------------------|-----------------|");
+
+		// Print course data
 		for (Course course : courses) {
-			System.out.println("Course ID     : " + course.getCourseId());
-			System.out.println("Course Name   : " + course.getName());
-			System.out.println("Description   : " + course.getDescription());
-			System.out.println("Course Year   : " + course.getCourseYear());
-			System.out.println("Created At    : " + course.getCreatedAt());
-			System.out.println("-----------------------------");
+			System.out.printf("| %-10s | %-25s | %-50s | %-15s |%n", course.getCourseId(),
+					truncate(course.getName(), 25), truncate(course.getDescription(), 50), course.getcourseDuration());
 		}
+		return studentId;
+
+	}
+
+	// Truncate long strings to fit in column width
+	private static String truncate(String text, int maxLength) {
+		if (text.length() <= maxLength) {
+			return text;
+		} else {
+			return text.substring(0, maxLength - 3) + "...";
+		}
+	}
+
+	public void removeCourseForStudent(Scanner scanner) {
+		
+		int studentId=viewCourseOfStudentBYId(scanner);
+		int courseId = DataValidationUtil.checkFormatInt(scanner ,"Enter course id to delete :");
+		
+		
+		boolean isRemoved = studentDao.removCourseForStudent(studentId,courseId);
+		
+		if(isRemoved) {
+			System.out.println("deleted sucsessfully");
+		}else {
+			System.out.println("cannot be delete course might have already deleted");
+		}
+		
 	}
 
 }

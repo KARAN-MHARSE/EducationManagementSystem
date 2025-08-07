@@ -1,5 +1,6 @@
 package com.aurionpro.ems.services;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +13,10 @@ import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
 import com.aurionpro.ems.exceptions.CustomException;
 import com.aurionpro.ems.exceptions.DataValidationException;
+import com.aurionpro.ems.exceptions.StudentNotFoundException;
 import com.aurionpro.ems.exceptions.SubjectNotFoundException;
 import com.aurionpro.ems.exceptions.TeacherNotFoundException;
+import com.aurionpro.ems.models.Student;
 import com.aurionpro.ems.models.Subject;
 import com.aurionpro.ems.models.Teacher;
 import com.aurionpro.ems.models.Teacher_Subject;
@@ -89,19 +92,32 @@ public class TeacherService {
 
 	}
 
-	public void printAllTeacherDetails(Scanner scanner) {
-		List<Teacher> teacherDetails = teacherDao.getAllTeacherDetails();
+//	public void printAllTeacherDetails(Scanner scanner) {
+//		List<Teacher> teacherDetails = teacherDao.getAllTeacherDetails();
+//		if (teacherDetails.isEmpty()) {
+//			System.out.println("No teachers present in the system");
+//			return;
+//		}
+//		
+//			PrintDataInFormat.printTeachers(teacherDetails);
+//		
+//	}
+	public boolean printAllTeacherDetails() {
+		List<Teacher> teacherDetails = teacherDao.getAllTeachers();
 		if (teacherDetails.isEmpty()) {
 			System.out.println("No teachers present in the system");
-			return;
+			return false;
 		}
 		
 			PrintDataInFormat.printTeachers(teacherDetails);
-		
+			return true;
 	}
+	
 
+
+	
 	public void assignSubject(Scanner scanner) {
-		if(!printAllTeachers()) throw new TeacherNotFoundException();
+		if(!printAllTeacherDetails()) throw new TeacherNotFoundException();
 		
 		int teacherId = DataValidationUtil.checkFormatInt(scanner, "Enter Teacher ID to assign:");
 		try {
@@ -135,6 +151,7 @@ public class TeacherService {
 //	}
 
 	public void showSubjectsOfTeacher(Scanner scanner) {
+		printAllTeacherDetails();
 		int teacherId = DataValidationUtil.checkFormatInt(scanner, "Enter Teacher ID:");
 		try {
 			if (!checkTeacherId(teacherId))
@@ -195,7 +212,10 @@ public class TeacherService {
 	}
 
 	public void RemoveASubject(Scanner scanner) {
-		int teacherId = DataValidationUtil.checkFormatInt(scanner, "Enter Teacher ID to assign:");
+		
+		getTeacherSubjectDetails();
+		
+		int teacherId = DataValidationUtil.checkFormatInt(scanner, "Enter Teacher Id :");
 
 		try {
 			if (!checkTeacherId(teacherId))
@@ -205,7 +225,7 @@ public class TeacherService {
 			return;
 		}
 
-		int subjectId = DataValidationUtil.checkFormatInt(scanner, "Enter subject ID to assign:");
+		int subjectId = DataValidationUtil.checkFormatInt(scanner, "Enter subject ID to remove :");
 
 		try {
 			if (!checkSubjectId(subjectId))
@@ -220,29 +240,31 @@ public class TeacherService {
 
 	}
 
-//	public List<Teacher_Subject> getTeacherSubjectDetails(List<Teacher_Subject> teacher_subject_Details) {
-//		List<Teacher_Subject> teacher_subject_Details = new ArrayList<>();
-//		teacher_subject_Details = teacherService.getTeacherSubjectDetails(teacher_subject_Details);
-//		if (teacher_subject_Details.isEmpty()) {
-//			System.out.println("No teacher has been assigned any subject yet.");
-//			return false;
-//		}
-//		System.out.println("======================================================================");
-//		System.out.println("                    Teacher - Subject Assignments");
-//		System.out.println("======================================================================");
-//		System.out.printf("| %-12s | %-25s | %-12s | %-25s |\n", "Teacher ID", "Teacher Name", "Subject ID",
-//				"Subject Name");
-//		System.out.println("----------------------------------------------------------------------");
-//
-//		for (Teacher_Subject detail : teacher_subject_Details) {
-//			System.out.printf("| %-12d | %-25s | %-12d | %-25s |\n", detail.getTeacherID(), detail.getTeacherName(),
-//					detail.getSubjectID(), detail.getSubjectName());
-//		}
-//
-//		System.out.println("======================================================================");
-//
-//		return true;
-//	}
+	public List<Teacher_Subject> getTeacherSubjectDetails() {
+		List<Teacher_Subject> teacher_subject_details = new ArrayList<>();
+		teacher_subject_details = teacherDao.getTeacherSubjectDetails(teacher_subject_details);
+		if (teacher_subject_details.isEmpty()) {
+			System.out.println("No teacher has been assigned any subject yet.");
+			return teacher_subject_details;
+		}
+		System.out.println("======================================================================");
+		System.out.println("                    Teacher - Subject Assignments");
+		System.out.println("======================================================================");
+		System.out.printf("| %-12s | %-25s | %-12s | %-25s |\n", "Teacher ID", "Teacher Name", "Subject ID",
+				"Subject Name");
+		System.out.println("----------------------------------------------------------------------");
+
+		for (Teacher_Subject detail : teacher_subject_details) {
+			
+			//System.out.println(detail.getSubjectID());
+			System.out.printf("| %-12d | %-25s | %-12s | %-25s |\n", detail.getTeacherID(), detail.getTeacherName(),
+					detail.getSubjectID(), detail.getSubjectName());
+		}
+
+		System.out.println("======================================================================");
+
+		return teacher_subject_details;
+	}
 
 	public boolean checkTeacherId(int teacherId) {
 		return teacherDao.checkTeacherId(teacherId);

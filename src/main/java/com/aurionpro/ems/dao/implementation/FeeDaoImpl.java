@@ -192,4 +192,31 @@ public class FeeDaoImpl implements IFeeDao {
 	        return pendingList;
 	    }
 
+	 @Override
+	 public List<Course> getFeesByCourse() {
+		 String sql = "select c.course_id,c.name,c.course_fee  from ems.course c where is_deleted=0";
+			List<Course> fees = new ArrayList<Course>();
+
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+
+				ResultSet resultSet = preparedStatement.executeQuery();
+
+				while (resultSet.next()) {
+					Course course = new Course();
+					course.setCourseId(resultSet.getInt(1));
+					course.setName(resultSet.getString(2));
+					course.setCourseFee(resultSet.getDouble(3));
+
+					fees.add(course);
+				}
+
+			} catch (SQLException exception) {
+				System.out.println("error occured while fethching " + exception.getMessage());
+			}
+
+			return fees;
+
+	 }
+
 }

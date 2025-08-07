@@ -86,7 +86,7 @@ public class StudentDaoImpl implements IStudentDao {
 	}
 
 	public Student getStudentByEmail(String email) {
-		if (email == null || email.isBlank())
+		if (email == null || email.isEmpty())
 			return null;
 
 		String sql = "select * from ems.student st join ems.user u on st.user_id = u.user_id where u.email = ?;";
@@ -154,8 +154,8 @@ public class StudentDaoImpl implements IStudentDao {
 
 		        boolean success = "SUCCESS".equalsIgnoreCase(resultMessage);
 		        if(!success) {
-		        	throw new CustomException(resultMessage);
-		        	
+		        	 System.out.println("Student might already exist");
+		        	return false;
 		        }
 		         return true;
 
@@ -196,9 +196,9 @@ public class StudentDaoImpl implements IStudentDao {
 	        return false;
 	    }
 
-	    String insertSql = "insert into ems.student_course (student_id, course_id) values (?, ?)";
+	    String insertSql = "call ems.assign_course_to_student(?,?)";
 
-	    try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
+	    try (CallableStatement insertStmt = connection.prepareCall(insertSql)) {
 	        insertStmt.setInt(1, studentId);
 	        insertStmt.setInt(2, courseId);
 	        insertStmt.executeUpdate();
@@ -263,7 +263,7 @@ public class StudentDaoImpl implements IStudentDao {
 	            course.setCourseId(rs.getInt("course_id"));
 	            course.setName(rs.getString("name"));
 	            course.setDescription(rs.getString("description"));
-	            course.setCourseYear(rs.getInt("course_duration"));
+	            course.setcourseDuration(rs.getInt(studentId));
 
 	            courses.add(course);
 	        }
@@ -275,5 +275,31 @@ public class StudentDaoImpl implements IStudentDao {
 
 	    return courses;
 	}
-	
+
+	@Override
+	public boolean removCourseForStudent(int studentId, int courseId) {
+	    String sql = "call ems.removeCourseForStudent(?, ?)";
+
+	    try (
+	        CallableStatement stmt = connection.prepareCall(sql)
+	    ) {
+	        stmt.setInt(1, studentId);
+	        stmt.setInt(2, courseId);
+
+	        if (stmt.execute()) {
+	            try (ResultSet rs = stmt.getResultSet()) {
+	                if (rs.next()) {
+	                    String msg = rs.getString("message");
+	                    System.out.println(msg);
+	                    return msg.toLowerCase().contains("success");
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error while removing course: " + e.getMessage());
+	    }
+
+	    return false;
+	}
+
 }

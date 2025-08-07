@@ -28,6 +28,11 @@ public class DashboardService {
 						rs.getString("subjects_assigned"), rs.getString("teacher"), rs.getDouble("total_fee"),
 						rs.getDouble("total_paid"), rs.getDouble("pending_fee"));
 
+//				Dashboard entry = new Dashboard(rs.getInt("sr_no"), rs.getInt("student_id"),
+//						rs.getString("student_name"),
+//						rs.getString("subjects_assigned"), rs.getString("teacher"), rs.getDouble("total_fee"),
+//						rs.getDouble("total_paid"), rs.getDouble("pending_fee"));
+				
 				dashboardList.add(entry);
 			}
 

@@ -11,6 +11,9 @@ public class Dashboard {
 	private double totalPaid;
 	private double pendingFee;
 
+	public Dashboard() {
+		super();
+	}
 	public Dashboard(int srNo, int studentId, String studentName, String courses, String subjects, String teachers,
 			double totalFee, double totalPaid, double pendingFee) {
 		this.srNo = srNo;
@@ -23,6 +26,18 @@ public class Dashboard {
 		this.totalPaid = totalPaid;
 		this.pendingFee = pendingFee;
 	}
+//	public Dashboard(int srNo, int studentId, String studentName,  String subjects, String teachers,
+//			double totalFee, double totalPaid, double pendingFee) {
+//		this.srNo = srNo;
+//		this.studentId = studentId;
+//		this.studentName = studentName;
+////		this.courses = courses;
+//		this.subjects = subjects;
+//		this.teachers = teachers;
+//		this.totalFee = totalFee;
+//		this.totalPaid = totalPaid;
+//		this.pendingFee = pendingFee;
+//	}
 
 	public int getSrNo() {
 		return srNo;

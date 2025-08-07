@@ -6,7 +6,7 @@ import com.aurionpro.ems.services.FeesServices;
 
 public class FeesController {
 	FeesServices feesServices;
-	
+
 	public FeesController(FeesServices feesServices) {
 		this.feesServices = feesServices;
 	}
@@ -15,9 +15,9 @@ public class FeesController {
 		boolean isContinue = true;
 
 		while (isContinue) {
-			System.out.println("Enter choice code " + "\n1. View Total Paid Fees" + "\n2. View Total Pending Fees "
-					+ "\n3. View Fees By Student  " + "\n4. View Fees By Course"
-					+ "\n5. Update fees of a course \n6. Total Earning " + "\n7. Go Back");
+			System.out.println("\nEnter choice code " + "\n1. View Total Paid Fees" + "\n2. View Total Pending Fees "
+					+ "\n3. View Fees By Student  " + "\n4. View Fees By Course ID" + "\n5. View Fees By Course"
+					+ "\n6. Update fees of a course \n" + "7. Total Earning " + "\n8. Go Back");
 			try {
 				int choice = scanner.nextInt();
 				scanner.nextLine();
@@ -36,12 +36,15 @@ public class FeesController {
 					feesServices.viewCourseFeeById(scanner);
 					break;
 				case 5:
-					feesServices.updateFeeById(scanner);
+					feesServices.viewCourseFees();
 					break;
 				case 6:
-					feesServices.getTotalEarning();
+					feesServices.updateFeeById(scanner);
 					break;
 				case 7:
+					feesServices.getTotalEarning();
+					break;
+				case 8:
 					isContinue = false;
 					break;
 				default:

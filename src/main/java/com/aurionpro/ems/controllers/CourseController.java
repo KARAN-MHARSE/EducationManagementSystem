@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.aurionpro.ems.services.CourseService;
+import com.aurionpro.ems.utils.DataValidationUtil;
 
 public class CourseController {
 	CourseService courseService;
@@ -16,12 +17,11 @@ public class CourseController {
 		boolean isContinue = true;
 
 		while (isContinue) {
-			System.out.println("Enter choice code " + "\n1. View All Courses " + "\n2. Add New Course "
-					+ "\n3. Add Subjects in A Course  " + "\n4. View Subjects of A Course" + "\n5. Search A Course "
-					+ "\n6. Delete A Course "  + "\n7. Go Back");
+
 			try {
-				int choice = scanner.nextInt();
-				scanner.nextLine();
+				int choice = DataValidationUtil.checkFormatInt(scanner, "Enter choice code " + "\n1. View All Courses " + "\n2. Add New Course "
+						+ "\n3. Add Subjects in A Course  " + "\n4. View Subjects of A Course" + "\n5. Search A Course "
+						+ "\n6. Delete A Course "  + "\n7. Reactivate A Course" + "\n8. Go Back");
 
 				switch (choice) {
 				case 1:
@@ -43,6 +43,9 @@ public class CourseController {
 					courseService.deleteCourseById(scanner);
 					break;
 				case 7:
+					courseService.reactivateACourse(scanner);
+					break;
+				case 8:
 					isContinue = false;
 					break;
 				default:
@@ -51,14 +54,15 @@ public class CourseController {
 				}
 			} catch (NumberFormatException e) {
 //				e.printStackTrace();
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}
 			catch (SQLException e) {
-				System.err.println(e.getMessage());			}
+				System.out.println(e.getMessage());			}
 			catch (Exception e) {
 //				e.printStackTrace();
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}
+		
 		}
 
 	}

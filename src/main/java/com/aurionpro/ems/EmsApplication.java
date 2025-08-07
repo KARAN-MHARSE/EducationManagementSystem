@@ -40,6 +40,10 @@ public class EmsApplication {
 		authenticationController.showAuthenticationMenu(scanner);
 		
 		
+		
+		
+	//	TeacherController controller = new TeacherController(new TeacherService()).printTeacherManagementMenu(scanner);
+		
 
 	}
 }

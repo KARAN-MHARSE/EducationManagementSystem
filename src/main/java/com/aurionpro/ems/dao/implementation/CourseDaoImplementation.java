@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.CheckedOutputStream;
 
 import com.aurionpro.ems.dao.ICourseDao;
@@ -25,23 +26,34 @@ public class CourseDaoImplementation implements ICourseDao {
 		connection = Database.getConnection();
 	}
 
-	public boolean addNewCourse(Course course) {
-		String sql = "{call ems.AddNewCourse(?,?)}";
-		course.setDescription(course.getDescription() == null ? "" : course.getDescription());
+	public int addNewCourse(Course course) {
+	    String sql = "{CALL ems.AddNewCourse(?,?,?,?)}";
+	    int generatedCourseId = -1;
 
-		try {
-			CallableStatement callableStatement = connection.prepareCall(sql);
+	    try (CallableStatement stmt = connection.prepareCall(sql)) {
+	        stmt.setString(1, course.getName());
+	        stmt.setString(2, course.getDescription() == null ? "" : course.getDescription());
+	        stmt.setInt(3, course.getcourseDuration());
+	        stmt.setDouble(4, course.getCourseFee());
 
-			callableStatement.setString(1, course.getName());
-			callableStatement.setString(2, course.getDescription());
+	        boolean hasResult = stmt.execute();
 
-			int updates = callableStatement.executeUpdate();
-			return updates > 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
+	        if (hasResult) {
+	            try (ResultSet rs = stmt.getResultSet()) {
+	                if (rs.next()) {
+	                    generatedCourseId = rs.getInt("course_id");
+	                    course.setCourseId(generatedCourseId); // ✅ Set ID into object
+	                }
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return generatedCourseId;
 	}
+
 
 	public List<Course> getAllCourses() {
 		String query = "SELECT * FROM ems.course";
@@ -51,7 +63,7 @@ public class CourseDaoImplementation implements ICourseDao {
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
-//			System.out.println("Karan:" + resultSet.next());
+
 
 			List<Course> courses = new ArrayList<Course>();
 
@@ -61,13 +73,15 @@ public class CourseDaoImplementation implements ICourseDao {
 				String description = resultSet.getString(3);
 				int courseYear = resultSet.getInt(4);
 				boolean isCourseDeleted = resultSet.getBoolean("is_deleted");
+				double courseFee = resultSet.getDouble(7);
 
 				Course course = new Course();
 				course.setCourseId(courseId);
 				course.setName(name);
-				course.setDescription((description == null || !description.isBlank()) ? description : "");
-				course.setCourseYear(courseYear);
+				course.setDescription((description == null || !description.isEmpty()) ? description : "");
+				course.setcourseDuration(courseYear);
 				course.setDeleted(isCourseDeleted);
+				course.setCourseFee(courseFee);
 
 				courses.add(course);
 
@@ -94,8 +108,9 @@ public class CourseDaoImplementation implements ICourseDao {
 	public void printAllCourseDetails() {
 		List<Course> courses = getAllCourses();
 
-		if(courses == null || courses.isEmpty()) throw new CourseNotFoundException();
-		
+		if (courses == null || courses.isEmpty())
+			throw new CourseNotFoundException();
+
 		PrintDataInFormat.printCourses(courses);
 	}
 
@@ -207,6 +222,62 @@ public class CourseDaoImplementation implements ICourseDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean viewAllDeleted() {
+		String query = "SELECT * FROM ems.course WHERE is_deleted = 1";
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (!resultSet.next()) {
+				return false;
+			}
+
+			System.out.printf("%-10s | %-25s | %-50s | %-12s%n", "Course ID", "Course Name", "Description",
+					"Course Year");
+			System.out.println(
+					"----------------------------------------------------------------------------------------------");
+
+			do {
+				int courseId = resultSet.getInt("course_id");
+				String name = resultSet.getString("name");
+				String description = resultSet.getString("description");
+				int courseYear = resultSet.getInt("course_year");
+
+				System.out.printf("%-10d | %-25s | %-50s | %-12d%n", courseId, name, truncate(description, 50),
+						courseYear);
+			} while (resultSet.next());
+
+		} catch (SQLException e) {
+			System.out.println("Failed to load course details: " + e.getMessage());
+		}
+		return true;
+	}
+
+	private String truncate(String text, int maxLength) {
+		if (text == null)
+			return "";
+		return text.length() <= maxLength ? text : text.substring(0, maxLength - 3) + "...";
+	}
+
+	@Override
+	public boolean reactivateACourse(int courseId) {
+		String sql = "update ems.course set is_deleted = false where course_id =? and is_deleted = true";
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, courseId);
+
+			int restoredRowsCount = statement.executeUpdate();
+
+			return restoredRowsCount > 0;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

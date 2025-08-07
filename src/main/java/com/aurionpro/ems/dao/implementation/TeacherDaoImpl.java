@@ -9,9 +9,12 @@ import java.util.List;
 
 import com.aurionpro.ems.dao.ITeacherDao;
 import com.aurionpro.ems.database.Database;
+import com.aurionpro.ems.enums.Gender;
+import com.aurionpro.ems.models.Student;
 import com.aurionpro.ems.models.Subject;
 import com.aurionpro.ems.models.Teacher;
 import com.aurionpro.ems.models.Teacher_Subject;
+import com.aurionpro.ems.utils.ResultSetConversion;
 import com.mysql.cj.jdbc.CallableStatement;
 
 public  class TeacherDaoImpl implements ITeacherDao{
@@ -55,36 +58,24 @@ public  class TeacherDaoImpl implements ITeacherDao{
 	
 
 	public List<Teacher> getAllTeachers() {
-		List<Teacher> teacherDetails = new ArrayList<Teacher>();
+	    String query = "SELECT t.teacher_id, u.first_name, u.last_name, u.email, u.gender, u.city, " +
+	                   "t.qualification, t.experience, u.user_id, u.mobile_number, u.role, u.is_first_login, u.isActive " +
+	                   "FROM ems.teacher t " +
+	                   "JOIN ems.user u ON t.user_id = u.user_id " +
+	                   "WHERE u.isActive = true";
 
-		String query = "SELECT t.teacher_id, u.first_name, u.last_name, u.email, t.qualification, t.experience FROM ems.teacher t "
-				+ "JOIN ems.user u ON t.user_id = u.user_id where u.isActive=true";
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+	         ResultSet resultSet = preparedStatement.executeQuery()) {
 
-		try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+	        return ResultSetConversion.convertResultSetToTeacherList(resultSet);
 
-			while (resultSet.next()) {
-				Teacher teacher = new Teacher();
-				int teacherId = resultSet.getInt("teacher_id");
-				String fullName = resultSet.getString("first_name") + " " + resultSet.getString("last_name");
-				String email = resultSet.getString("email");
-				String qualification = resultSet.getString("qualification");
-				int experience = resultSet.getInt("experience");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 
-				teacher.setTeacherId(teacherId);
-				teacher.setEmail(email);
-				teacher.setFirstName(fullName);
-				teacher.setQualification(qualification);
-				teacher.setExperience(experience);
-				teacherDetails.add(teacher);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return teacherDetails;
+	    return new ArrayList<>(); 
 	}
+
 
 	public List<Teacher> getAllTeacherDetails() {
 		List<Teacher> teacherDetails = new ArrayList<Teacher>();
@@ -267,28 +258,28 @@ public  class TeacherDaoImpl implements ITeacherDao{
 	}
 
 	public List<Teacher_Subject> getTeacherSubjectDetails(List<Teacher_Subject> teacher_subject_Details) {
-		String query = "SELECT ts.teacher_id, u.first_name, u.last_name, ts.subject_id, s.name\r\n"
+		String query = "SELECT \r\n"
+				+ "    ts.teacher_id, \r\n"
+				+ "    CONCAT(u.first_name, ' ', u.last_name) AS teacher_name,\r\n"
+				+ "    GROUP_CONCAT(s.subject_id ORDER BY s.subject_id) AS subject_ids,\r\n"
+				+ "    GROUP_CONCAT(s.name ORDER BY s.subject_id SEPARATOR ', ') AS subject_names\r\n"
 				+ "FROM ems.teacher_subject_assignment ts\r\n"
 				+ "JOIN ems.subject s ON ts.subject_id = s.subject_id\r\n"
 				+ "JOIN ems.course c ON s.course_id = c.course_id AND c.is_deleted = false\r\n"
 				+ "JOIN ems.teacher t ON t.teacher_id = ts.teacher_id\r\n"
-				+ "JOIN ems.user u ON t.user_id = u.user_id\r\n" + "WHERE u.isActive = true;\r\n";
+				+ "JOIN ems.user u ON t.user_id = u.user_id\r\n"
+				+ "WHERE u.isActive = true\r\n"
+				+ "GROUP BY ts.teacher_id;";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			ResultSet resultSet = pstmt.executeQuery();
 			while (resultSet.next()) {
-
 				Teacher_Subject details = new Teacher_Subject();
 
-				int teacherID = resultSet.getInt("teacher_id");
-				String fullName = resultSet.getString("first_name") + " " + resultSet.getString("last_name");
-				int subjectID = resultSet.getInt("subject_id");
-				String subjectName = resultSet.getString("name");
-
-				details.setSubjectID(subjectID);
-				details.setSubjectName(subjectName);
-				details.setTeacherID(teacherID);
-				details.setTeacherName(fullName);
+				details.setTeacherID(resultSet.getInt("teacher_id"));
+				details.setTeacherName(resultSet.getString("teacher_name"));
+				details.setSubjectID(resultSet.getString("subject_ids"));     // Assuming this is a String
+				details.setSubjectName(resultSet.getString("subject_names")); // Assuming this is a String
 
 				teacher_subject_Details.add(details);
 			}
@@ -297,6 +288,7 @@ public  class TeacherDaoImpl implements ITeacherDao{
 		}
 		return teacher_subject_Details;
 	}
+
 
 	public boolean removeSubject(int teacherId, int subjectId) {
 		String query = "DELETE FROM ems.teacher_subject_assignment \r\n"

@@ -5,10 +5,11 @@ import java.util.Scanner;
 import com.aurionpro.ems.EmsApplication;
 import com.aurionpro.ems.models.User;
 import com.aurionpro.ems.services.StudentService;
+import com.aurionpro.ems.utils.DataValidationUtil;
 
 public class StudentController {
 	StudentService studentService;
-	
+
 	public StudentController(StudentService studentService) {
 		this.studentService = studentService;
 	}
@@ -17,12 +18,13 @@ public class StudentController {
 		boolean isContinue = true;
 
 		while (isContinue) {
-			System.out.println("Enter choice code " + "\n1. Add new student " + "\n2. Show all students "
-					+ "\n3. Search a student  " + "\n4. Delete a student"
-					+ "\n5. Assign a course to student \n6. View Assigned courses of a student " + "\n7. Go Back");
+
 			try {
-				int choice = scanner.nextInt();
-				scanner.nextLine();
+				int choice = DataValidationUtil.checkFormatInt(scanner,
+						"\nEnter choice code " + "\n1. Add new student " + "\n2. Show all students "
+								+ "\n3. Search a student  " + "\n4. Delete a student"
+								+ "\n5. Assign a course to student \n6. View Assigned courses of a student "
+								+ "\n7. Remove a course for student" + "\n8. Go Back");
 
 				switch (choice) {
 				case 1:
@@ -43,9 +45,13 @@ public class StudentController {
 					studentService.assignCourseToStudent(scanner);
 					break;
 				case 6:
-					studentService.viewCourseBYId(scanner);
+					studentService.viewCourseOfStudentBYId(scanner);
 					break;
 				case 7:
+					studentService.removeCourseForStudent(scanner);
+					break;
+
+				case 8:
 					isContinue = false;
 					break;
 				default:

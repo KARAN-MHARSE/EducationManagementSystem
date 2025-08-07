@@ -36,6 +36,8 @@ public interface IStudentDao {
 	
 	public List<Course> viewCoursesByStudentId(int studentId);
 
+	public boolean removCourseForStudent(int studentId,int courseID);
+
 }
 
 //

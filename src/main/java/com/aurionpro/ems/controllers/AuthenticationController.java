@@ -3,6 +3,7 @@ package com.aurionpro.ems.controllers;
 import java.util.Scanner;
 
 import com.aurionpro.ems.services.AuthenticationService;
+import com.aurionpro.ems.utils.DataValidationUtil;
 
 public class AuthenticationController {
 	private final AuthenticationService authenticationService;
@@ -15,11 +16,10 @@ public class AuthenticationController {
 		boolean isContinue = true;
 
 		while (isContinue) {
-			System.out.println("Choose " + "\n1. Login" + " \n2. Change Password");
+		
 
 			try {
-				int choice = scanner.nextInt();
-				scanner.nextLine();
+				int choice =DataValidationUtil.checkFormatInt(scanner, "Choose " + "\n1. Login" + " \n2. Change Password");
 
 				switch (choice) {
 				case 1:

@@ -26,7 +26,6 @@ public class AuthenticationService {
 	private AdminController adminController;
 	private StudentController studentController;
 	private TeacherController teacherController;
-
 	public AuthenticationService() {
 
 		StudentController studentController = new StudentController(new StudentService(new StudentDaoImpl()));
@@ -34,26 +33,25 @@ public class AuthenticationService {
 		CourseController courseController = new CourseController(new CourseService(new CourseDaoImplementation()));
 		FeesController feesController = new FeesController(new FeesServices());
 		DashboardController dashboardController = new DashboardController(new DashboardService());
-
 		adminController = new AdminController(studentController, teacherController, courseController, feesController,
 				dashboardController);
 	}
 
 	public void login(Scanner scanner) throws SQLException {
-		System.out.println("Enter the email");
-		String email = scanner.nextLine();
+		System.out.println("Enter the username");
+		String userName = scanner.nextLine();
 
 		System.out.println("Enter the password");
 		String password = scanner.nextLine();
 
-		if (email.isBlank() || password.isBlank()) {
+		if (userName.isEmpty() || password.isEmpty()) {
 			throw new DataValidationException("Enter valid credentials");
 		}
 
-//		Get user by email
-		String sql = "select * from ems.user u join ems.authentication a on u.user_id= a.user_id where u.email = ?";
+//		Get user by username
+		String sql = "select * from ems.user u join ems.authentication a on u.user_id= a.user_id where a.username = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, email);
+		statement.setString(1, userName);
 		ResultSet resultSet = statement.executeQuery();
 		if (!resultSet.next()) {
 			throw new AuthenticationException("User not found");
@@ -67,7 +65,7 @@ public class AuthenticationService {
 		Role role = Role.valueOf(resultSet.getString("role"));
 		switch (role) {
 //		case Student:
-//			StudentController.showMenu(scanner);
+//			studentRoleController.loginStudent();
 //			break;
 //		case Teacher:
 //			TeacherController.showMenu(scanner);
@@ -95,7 +93,7 @@ public class AuthenticationService {
 		System.out.println("Enter new Password");
 		String newPassword = scanner.nextLine();
 
-		if (oldPassword == null || newPassword == null || oldPassword.isBlank() || newPassword.isBlank()) {
+		if (oldPassword == null || newPassword == null || oldPassword.isEmpty() || newPassword.isEmpty()) {
 			throw new DataValidationException("Enter valid credentials");
 		}
 

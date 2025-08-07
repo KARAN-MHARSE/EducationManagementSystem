@@ -15,8 +15,8 @@ public class FeesServices {
 	private IFeeDao feeDao;
 
 	public FeesServices() {
-			this.feeDao = new FeeDaoImpl();
-		}
+		this.feeDao = new FeeDaoImpl();
+	}
 
 	public void viewFeeByStudentId(Scanner scanner) {
 
@@ -27,35 +27,42 @@ public class FeesServices {
 		if (summaries.isEmpty()) {
 			System.out.println(" No student found with ID: " + studentId);
 		} else {
-			System.out.println(" Total fee fetched successfully.");
+			System.out.println("Total fee fetched successfully.");
+
+			System.out.printf("%-12s %-25s %-15s %-18s %-20s%n", "Student ID", "Full Name", "Total Fee",
+					"Total Paid Fee", "Total Pending Fee");
+			System.out.println(
+					"---------------------------------------------------------------------------------------------");
+
 			for (StudentFeeSummary summary : summaries) {
-				System.out.println("Student ID: " + summary.getStudentId());
-				System.out.println("Full Name : " + summary.getFullName());
-				System.out.println("Total Fee : ₹" + summary.getTotalFee());
-				System.out.println("Total Paid Fee : ₹" + summary.getTotalPaidFee());
-				System.out.println("Total Pending Fee : ₹" + summary.getPendingFee());
-
+				System.out.printf("%-12s %-25s ₹%-14.2f ₹%-17.2f ₹%-19.2f%n", summary.getStudentId(),
+						summary.getFullName(), summary.getTotalFee(), summary.getTotalPaidFee(),
+						summary.getPendingFee());
 			}
-		}
 
+		}
 	}
 
 	public void viewCourseFeeById(Scanner scanner) {
-		int courseId = DataValidationUtil.checkFormatInt(scanner, "enter course id :");
+		viewCourseFees();
+		int courseId = DataValidationUtil.checkFormatInt(scanner, "Enter course id :");
 
 		List<Course> courses = feeDao.getFeesByCourseId(courseId);
 		if (courses.isEmpty()) {
 			System.out.println(" No course  found with ID: " + courseId);
 			return;
 		}
-		for (Course course : courses) {
-			System.out.println("Course Name: " + course.getName());
-			System.out.println("Course fee : " + course.getCourseFee());
+		System.out.printf("%-30s %-15s%n", "Course Name", "Course Fee (₹)");
+		System.out.println("---------------------------------------------------");
 
+		for (Course course : courses) {
+			System.out.printf("%-30s ₹%-14.2f%n", course.getName(), course.getCourseFee());
 		}
+
 	}
 
 	public void updateFeeById(Scanner scanner) {
+		viewCourseFees();
 		int courseId = DataValidationUtil.checkFormatInt(scanner, "Enter course id to update fees :");
 		double newFee = DataValidationUtil.checkFormatDouble(scanner, "Enter new Fee : ");
 
@@ -92,7 +99,7 @@ public class FeesServices {
 		List<PendingFeeStudentDto> totalFeeStudentDtos = feeDao.getStudentsWithTotalPaidFees();
 
 		if (totalFeeStudentDtos.isEmpty()) {
-			System.out.println(" No students with pending fees.");
+			System.out.println(" No students with total paid fees.");
 			return;
 		}
 
@@ -106,6 +113,26 @@ public class FeesServices {
 			System.out.printf("%-10d %-25s %-30s %-15s %-10.2f\n", dto.getStudentId(), dto.getFullName(),
 					dto.getEmail(), dto.getMobileNumber(), dto.getPendingFee());
 		}
+	}
+
+	public void viewCourseFees() {
+
+		List<Course> courses = feeDao.getFeesByCourse();
+//		System.out.printf("%-30s %-15s%n", "Course Name", "Course Fee (₹)");
+//		System.out.println("---------------------------------------------------");
+//
+//		for (Course course : courses) {
+//		    System.out.printf("%-30s ₹%-14.2f%n",
+//		            course.getName(),
+//		            course.getCourseFee());
+//		}
+		System.out.printf("%-10s %-30s %-15s%n", "Course ID", "Course Name", "Course Fee (₹)");
+		System.out.println("---------------------------------------------------------------");
+
+		for (Course course : courses) {
+			System.out.printf("%-10s %-30s ₹%-14.2f%n", course.getCourseId(), course.getName(), course.getCourseFee());
+		}
+
 	}
 
 }
