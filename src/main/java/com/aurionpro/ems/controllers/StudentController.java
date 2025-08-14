@@ -19,7 +19,7 @@ public class StudentController {
 		while (isContinue) {
 			System.out.println("Enter choice code " + "\n1. Add new student " + "\n2. Show all students "
 					+ "\n3. Search a student  " + "\n4. Delete a student"
-					+ "\n5. Assign a course to student \n6. View Assigned courses of a student " + "\n7. Go Back");
+					+ "\n5. Assign a course to student \n6. View Assigned courses of a student \n7.Update student current year" + "\n8. Go Back");
 			try {
 				int choice = scanner.nextInt();
 				scanner.nextLine();
@@ -46,6 +46,9 @@ public class StudentController {
 					studentService.viewCourseBYId(scanner);
 					break;
 				case 7:
+					studentService.updateStudentYear(scanner);
+					break
+				case 8:
 					isContinue = false;
 					break;
 				default:

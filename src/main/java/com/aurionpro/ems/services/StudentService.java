@@ -11,6 +11,7 @@ import com.aurionpro.ems.dao.IStudentDao;
 import com.aurionpro.ems.dao.implementation.CourseDaoImplementation;
 import com.aurionpro.ems.enums.Gender;
 import com.aurionpro.ems.enums.Role;
+import com.aurionpro.ems.exceptions.CustomException;
 import com.aurionpro.ems.exceptions.StudentNotFoundException;
 import com.aurionpro.ems.models.Course;
 import com.aurionpro.ems.models.Student;
@@ -239,6 +240,30 @@ public class StudentService {
 			System.out.println("Created At    : " + course.getCreatedAt());
 			System.out.println("-----------------------------");
 		}
+	}
+
+	public void updateStudentYear(Scanner scanner) {
+		System.out.println("Enter student id");
+		int studentId = scanner.nextInt();
+		scanner.nextLine();
+		
+		Student student = studentDao.getStudentByID(studentId);
+		if(student == null) throw new StudentNotFoundException();
+		if(student.isCompleted()) throw new CustomException("Student already passout");
+		
+		System.out.println("Enter the current year marks");
+		int marks = scanner.nextInt();
+		scanner.nextLine();
+		
+		if(marks < 35) throw new CustomException("Student failed, Sorry you can't push to next year");
+		
+		if(student.getYearOfStudy() == 4) {
+			
+		}
+		
+		
+		
+		
 	}
 
 }

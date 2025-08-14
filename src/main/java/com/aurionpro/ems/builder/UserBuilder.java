@@ -29,6 +29,7 @@ public class UserBuilder {
 	private BigDecimal averagePercentage;
 	private int yearOfStudy;
 	private int course_ID;
+	private boolean isCompleted;
 
 	private int teacherId;
 	private int subjectId;
@@ -142,12 +143,17 @@ public class UserBuilder {
 		this.adminId = adminId;
 		return this;
 	}
-
+	
+	public UserBuilder setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+		return this;
+	}
 
 	public Student getStudent() {
 		Student student = new Student(userId, firstName, lastName, mobileNumber, email, gender, city, role, createdAt, isFirstLogin, rollNumber, averagePercentage, yearOfStudy, course_ID,isActive);
 		student.setStudentId(studentId);
 		student.setCreatedAt(createdAt);
+		student.setCompleted(isCompleted);
 		return student;
 	}
 
