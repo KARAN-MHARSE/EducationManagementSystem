@@ -31,6 +31,7 @@ public class ResultSetConversion {
 					.setAveragePercentage(resultSet.getBigDecimal("average_percentage"))
 					.setYearOfStudy(resultSet.getInt("year_of_study"))
 					.setActive(resultSet.getBoolean("isActive"))
+					.setIsCompleted(resultSet.getBoolean("is_completed"))
 					.getStudent();
 			
 			students.add(student);		

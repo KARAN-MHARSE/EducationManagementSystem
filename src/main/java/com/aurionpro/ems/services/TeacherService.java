@@ -89,19 +89,20 @@ public class TeacherService {
 
 	}
 
-	public void printAllTeacherDetails(Scanner scanner) {
+	public boolean printAllTeacherDetails(Scanner scanner) {
 		List<Teacher> teacherDetails = teacherDao.getAllTeacherDetails();
 		if (teacherDetails.isEmpty()) {
 			System.out.println("No teachers present in the system");
-			return;
+			return false;
 		}
 		
 			PrintDataInFormat.printTeachers(teacherDetails);
+			return true;
 		
 	}
 
 	public void assignSubject(Scanner scanner) {
-		if(!printAllTeachers()) throw new TeacherNotFoundException();
+		if(!printAllTeacherDetails(scanner)) throw new TeacherNotFoundException();
 		
 		int teacherId = DataValidationUtil.checkFormatInt(scanner, "Enter Teacher ID to assign:");
 		try {

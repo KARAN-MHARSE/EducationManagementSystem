@@ -1,6 +1,6 @@
 package com.aurionpro.ems;
 
-import java.sql.Connection;
+//import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 //import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -38,6 +38,8 @@ public class EmsApplication {
 
 		AuthenticationController authenticationController = new AuthenticationController(new AuthenticationService());
 		authenticationController.showAuthenticationMenu(scanner);
+		
+		scanner.close();
 		
 		
 

@@ -14,6 +14,8 @@ public class Student extends User {
 	private BigDecimal averagePercentage;
 	private int yearOfStudy;
 	private int course_ID;
+	private boolean isCompleted;
+	
 	public Student() {
 		
 	}
@@ -46,6 +48,14 @@ public class Student extends User {
 
 	public BigDecimal getAveragePercentage() {
 		return averagePercentage;
+	}
+
+	public boolean isCompleted() {
+		return isCompleted;
+	}
+
+	public void setCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
 	}
 
 	public void setAveragePercentage(BigDecimal averagePercentage) {
